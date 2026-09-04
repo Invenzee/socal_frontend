@@ -49,6 +49,7 @@ import { useAuth } from "@/providers/auth-provider";
 import { useUnreadCount } from "@/hooks/use-unread";
 import type { UserRole } from "@/types/api";
 import { cn } from "@/lib/utils";
+import ModeSwitch from "@/components/mode-switch";
 
 type NavItem = {
   href: string;
@@ -267,6 +268,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
               <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
                 <p className="truncate text-[13px] font-semibold text-white">{user.fullName}</p>
                 <p className="truncate text-[11px] text-white/55">{user.email}</p>
+                <ModeSwitch tone="dark" className="mt-2 w-full" />
               </div>
               <Tooltip>
                 <TooltipTrigger
@@ -376,6 +378,8 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             </Tooltip>
 
             <span className="mx-1 hidden h-6 w-px bg-black/10 sm:block" />
+
+            <ModeSwitch tone="brand" className="hidden sm:inline-flex" />
 
             <DropdownMenu>
               <DropdownMenuTrigger

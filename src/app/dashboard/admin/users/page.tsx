@@ -124,7 +124,18 @@ export default function AdminUsersPage() {
       hideBelow: "lg",
       cell: (row) => <span className="tabular-nums">{row.phone || "—"}</span>,
     },
-    { id: "role", header: "Role", cell: (row) => <StatusPill status={row.role} /> },
+    { id: "role", header: "Signed up as", cell: (row) => <StatusPill status={row.originalRole || row.role} /> },
+    {
+      id: "mode",
+      header: "Current mode",
+      hideBelow: "md",
+      cell: (row) =>
+        row.role === "admin" ? (
+          <span className="text-xs text-black/40">—</span>
+        ) : (
+          <StatusPill status={row.currentMode || row.role} />
+        ),
+    },
     { id: "status", header: "Status", cell: (row) => <StatusPill status={row.status} /> },
     {
       id: "verified",
@@ -232,7 +243,7 @@ export default function AdminUsersPage() {
         rowActions={(row) => (
           <>
             <ActionIcon label="Email member" icon={<RiMailLine />} tone="neutral" href={`mailto:${row.email}`} />
-            {row.role === "admin" ? null : (
+            {row.originalRole === "admin" || row.role === "admin" ? null : (
               <>
                 <DropdownMenu>
                   <Tooltip>
@@ -254,9 +265,9 @@ export default function AdminUsersPage() {
                     <TooltipContent className="bg-brand text-white">Change role</TooltipContent>
                   </Tooltip>
                   <DropdownMenuContent align="end" className="w-40">
-                    <DropdownMenuLabel>Change role</DropdownMenuLabel>
+                    <DropdownMenuLabel>Change current mode</DropdownMenuLabel>
                     <DropdownMenuRadioGroup
-                      value={row.role}
+                      value={row.currentMode || row.role}
                       onValueChange={(value) =>
                         void patch([row.id], { role: value as UserRole }, `${row.fullName} is now ${value}`)
                       }

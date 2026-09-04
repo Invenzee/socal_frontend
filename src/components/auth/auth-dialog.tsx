@@ -55,12 +55,16 @@ export default function AuthDialog() {
 
   function finish() {
     const pending = consumePending();
+    setStep("form");
+    setCode("");
+    setError("");
     close();
     void refresh();
-    if (pending?.type === "sell") router.push("/sell");
-    if (pending) {
+    if (!pending) return;
+    window.setTimeout(() => {
+      if (pending.type === "sell") router.push("/sell");
       window.dispatchEvent(new CustomEvent("socal:auth-resume", { detail: pending }));
-    }
+    }, 50);
   }
 
   async function onSignup(event: React.FormEvent) {
@@ -108,7 +112,7 @@ export default function AuthDialog() {
     try {
       const data = await api<{ user: AuthUser }>("/auth/verify-email", {
         method: "POST",
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, email: signup.email || login.email }),
       });
       setUser(data.user);
       toast.success("Email verified");

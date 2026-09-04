@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import UnreadBadge from "@/components/unread-badge";
+import ModeSwitch from "@/components/mode-switch";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -123,7 +124,9 @@ export default function Header() {
               View Listings
             </Link>
             {user ? (
-              <DropdownMenu>
+              <>
+                <ModeSwitch tone="brand" />
+                <DropdownMenu>
                 <DropdownMenuTrigger className="ml-1 inline-flex items-center gap-1.5 text-sm font-semibold text-black">
                   {user.fullName.split(" ")[0]}
                 </DropdownMenuTrigger>
@@ -143,6 +146,7 @@ export default function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              </>
             ) : (
               <Link href="/login" className="ml-1 hidden shrink-0 items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-black transition-colors hover:text-brand lg:inline-flex">
                 <RiLockLine className="size-4" aria-hidden />
@@ -183,10 +187,15 @@ export default function Header() {
               </Link>
             </div>
             {user ? (
-              <Link href="/dashboard" onClick={closeMenu} className="mt-3 inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-black">
-                <RiDashboardLine className="size-4" />
-                Dashboard
-              </Link>
+              <>
+                <div className="mt-3 px-3">
+                  <ModeSwitch tone="brand" className="w-full justify-center" />
+                </div>
+                <Link href="/dashboard" onClick={closeMenu} className="mt-3 inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-black">
+                  <RiDashboardLine className="size-4" />
+                  Dashboard
+                </Link>
+              </>
             ) : (
               <Link href="/login" onClick={closeMenu} className="mt-3 inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-black">
                 <RiLockLine className="size-4" />

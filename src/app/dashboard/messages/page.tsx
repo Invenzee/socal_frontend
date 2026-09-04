@@ -88,6 +88,7 @@ export default function MessagesPage() {
   const [draft, setDraft] = useState("");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [side, setSide] = useState<"buying" | "selling">(user?.role === "seller" ? "selling" : "buying");
   const [typing, setTyping] = useState(false);
   const [online, setOnline] = useState<Record<string, boolean>>({});
   const [showEmoji, setShowEmoji] = useState(false);
@@ -110,14 +111,14 @@ export default function MessagesPage() {
 
   const loadConversations = useCallback(async () => {
     try {
-      const data = await api<{ items: Conversation[] }>("/conversations");
+      const data = await api<{ items: Conversation[] }>(`/conversations?side=${side}`);
       setConversations(data.items);
     } catch {
       // Keep whatever is on screen rather than blanking the inbox on a failed poll.
     } finally {
       setLoadingList(false);
     }
-  }, []);
+  }, [side]);
 
   const loadMessages = useCallback(async (id: string) => {
     try {
@@ -320,14 +321,17 @@ export default function MessagesPage() {
               </div>
             </div>
             <div className="flex rounded-lg bg-white/12 p-0.5">
-              {(["all", "unread"] as const).map((option) => (
+              {(["buying", "selling"] as const).map((option) => (
                 <button
                   key={option}
                   type="button"
-                  onClick={() => setFilter(option)}
+                  onClick={() => {
+                    setSide(option);
+                    setLoadingList(true);
+                  }}
                   className={cn(
                     "cursor-pointer rounded-md px-2.5 py-1 text-[11px] font-semibold capitalize transition-colors",
-                    filter === option ? "bg-white text-brand" : "text-white/70 hover:text-white",
+                    side === option ? "bg-white text-brand" : "text-white/70 hover:text-white",
                   )}
                 >
                   {option}
@@ -354,6 +358,18 @@ export default function MessagesPage() {
               </button>
             ) : null}
           </div>
+          <div className="mt-2 flex justify-end">
+            <button
+              type="button"
+              onClick={() => setFilter(filter === "unread" ? "all" : "unread")}
+              className={cn(
+                "cursor-pointer rounded-md px-2 py-1 text-[11px] font-semibold transition-colors",
+                filter === "unread" ? "bg-white text-brand" : "text-white/70 hover:text-white",
+              )}
+            >
+              {filter === "unread" ? "Unread only" : "All in this tab"}
+            </button>
+          </div>
         </header>
 
         <div className="dash-scroll flex-1 overflow-y-auto">
@@ -373,12 +389,14 @@ export default function MessagesPage() {
                 <RiInboxLine />
               </span>
               <p className="mt-4 font-heading text-base text-black">
-                {search || filter === "unread" ? "Nothing here" : "No conversations yet"}
+                {search || filter === "unread" ? "Nothing here" : `No ${side} conversations yet`}
               </p>
               <p className="mt-1 text-sm text-black/45">
                 {search || filter === "unread"
-                  ? "Try clearing the search or switching back to all."
-                  : "Message a seller from any listing and the thread appears here."}
+                  ? "Try clearing the search or switching tabs."
+                  : side === "selling"
+                    ? "When a buyer messages one of your listings, it shows up here."
+                    : "Message a seller from any listing and the thread appears here."}
               </p>
             </div>
           ) : (

@@ -11,12 +11,16 @@ export type AuthUser = {
   role: UserRole;
   status: UserStatus;
   emailVerified: boolean;
+  canSell: boolean;
+  canBuy: boolean;
 };
 
 /** `/admin/users` returns raw user documents rather than the session shape. */
-export type AdminUser = Omit<AuthUser, "emailVerified"> & {
+export type AdminUser = Omit<AuthUser, "emailVerified" | "canSell" | "canBuy"> & {
   emailVerifiedAt: string | null;
   createdAt: string;
+  originalRole?: UserRole;
+  currentMode?: "buyer" | "seller";
 };
 
 export type TaxonomyItem = {

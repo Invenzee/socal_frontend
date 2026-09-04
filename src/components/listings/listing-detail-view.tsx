@@ -50,9 +50,9 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
     const onResume = (event: Event) => {
       const pending = (event as CustomEvent).detail as { type: string; listingId: string };
       if (pending.listingId !== listing.id) return;
-      if (pending.type === "reveal") void revealPhone();
-      if (pending.type === "chat") void startChat();
-      if (pending.type === "favorite") void toggleFavorite();
+      if (pending.type === "reveal") void revealPhone(true);
+      if (pending.type === "chat") void startChat(true);
+      if (pending.type === "favorite") void toggleFavorite(true);
     };
     window.addEventListener("socal:auth-resume", onResume);
     return () => window.removeEventListener("socal:auth-resume", onResume);
@@ -70,8 +70,8 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
     return true;
   }
 
-  async function revealPhone() {
-    if (!ensureReady("reveal")) return;
+  async function revealPhone(skipAuth = false) {
+    if (!skipAuth && !ensureReady("reveal")) return;
     try {
       const data = await api<{ phone: string }>(`/listings/${listing.id}/reveal-phone`, { method: "POST" });
       setPhone(data.phone);
@@ -80,8 +80,8 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
     }
   }
 
-  async function startChat() {
-    if (!ensureReady("chat")) return;
+  async function startChat(skipAuth = false) {
+    if (!skipAuth && !ensureReady("chat")) return;
     try {
       const data = await api<{ item: { id: string } }>("/conversations", {
         method: "POST",
@@ -93,8 +93,8 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
     }
   }
 
-  async function toggleFavorite() {
-    if (!ensureReady("favorite")) return;
+  async function toggleFavorite(skipAuth = false) {
+    if (!skipAuth && !ensureReady("favorite")) return;
     try {
       if (saved) {
         await api(`/favorites/${listing.id}`, { method: "DELETE" });

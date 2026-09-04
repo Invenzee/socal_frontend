@@ -120,12 +120,12 @@ export default function SellPage() {
 
   async function becomeSeller() {
     try {
-      const updated = await api<{ user: NonNullable<typeof user> }>("/auth/me", {
+      const updated = await api<{ user: NonNullable<typeof user> }>("/auth/mode", {
         method: "PATCH",
-        body: JSON.stringify({ role: "seller" }),
+        body: JSON.stringify({ mode: "seller" }),
       });
       setUser(updated.user);
-      toast.success("You can now list vehicles.");
+      toast.success("You are now in seller mode.");
     } catch {
       toast.error("Could not switch to seller.");
     }
@@ -151,8 +151,12 @@ export default function SellPage() {
       router.push("/login?next=/sell");
       return;
     }
-    if (user.role === "buyer") {
-      toast.error("Switch to a seller account to list a vehicle.");
+    if (user.role === "buyer" && !user.canSell) {
+      toast.error("Switch to seller mode to list a vehicle.");
+      return;
+    }
+    if (user.role === "buyer" && user.canSell) {
+      toast.error("Switch to seller mode to submit a listing.");
       return;
     }
     if (!user.emailVerified) {
@@ -220,8 +224,14 @@ export default function SellPage() {
   if (user.role === "buyer") {
     return (
       <main className="container-site py-20 text-center">
-        <h1 className="font-heading text-[clamp(1.75rem,6vw,50px)] text-black">Become a seller</h1>
-        <p className="mt-3 text-black/60">Your account is currently a buyer account. Switch to seller to list a vehicle.</p>
+        <h1 className="font-heading text-[clamp(1.75rem,6vw,50px)] text-black">
+          {user.canSell ? "Switch to seller mode" : "Become a seller"}
+        </h1>
+        <p className="mt-3 text-black/60">
+          {user.canSell
+            ? "You already sell on SoCal Truck Trade. Switch to seller mode to list another vehicle."
+            : "Use the same account to list vehicles. You can switch back to buyer anytime."}
+        </p>
         <button type="button" onClick={() => void becomeSeller()} className="mt-6 inline-flex rounded-lg bg-brand px-6 py-3 font-semibold text-white">
           Continue as seller
         </button>

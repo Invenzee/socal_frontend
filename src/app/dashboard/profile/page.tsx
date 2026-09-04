@@ -20,6 +20,7 @@ import { DashButton } from "@/components/dashboard/dash-button";
 import { api, ApiRequestError } from "@/lib/api";
 import { useAuth } from "@/providers/auth-provider";
 import type { AuthUser } from "@/types/api";
+import ModeSwitch from "@/components/mode-switch";
 
 function initials(name: string) {
   return name
@@ -190,8 +191,11 @@ export default function ProfilePage() {
 
             <div className="grid gap-3 rounded-xl bg-brand/5 p-4 sm:grid-cols-2">
               <div>
-                <p className="text-[11px] font-semibold tracking-[0.12em] text-brand uppercase">Account role</p>
+                <p className="text-[11px] font-semibold tracking-[0.12em] text-brand uppercase">Current mode</p>
                 <p className="mt-0.5 text-sm font-medium text-black capitalize">{user.role}</p>
+                <div className="mt-2">
+                  <ModeSwitch tone="brand" />
+                </div>
               </div>
               <div>
                 <p className="text-[11px] font-semibold tracking-[0.12em] text-brand uppercase">Account status</p>
