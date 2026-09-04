@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.github
+.cursor
+*.md
+.env
+.env.*
+!.env.example
+Dockerfile
+.dockerignore
+npm-debug.log*
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+next-env.d.ts
