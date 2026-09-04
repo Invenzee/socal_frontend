@@ -13,7 +13,6 @@ import {
   RiHeartLine,
   RiInboxLine,
   RiSearchLine,
-  RiShieldCheckLine,
   RiShieldUserLine,
   RiTimeLine,
   RiUserStarLine,
@@ -130,7 +129,7 @@ export default function DashboardHomePage() {
         title={`${greeting()}, ${firstName}`}
         description={
           user.role === "admin"
-            ? "Marketplace health, moderation queue and member activity at a glance."
+            ? "Marketplace health, listings, and member activity at a glance."
             : user.role === "seller"
               ? "Track how your trucks are performing and reply to buyers faster."
               : "Pick up where you left off — saved trucks and seller conversations."
@@ -142,11 +141,11 @@ export default function DashboardHomePage() {
             </DashLinkButton>
           ) : user.role === "admin" ? (
             <DashLinkButton
-              href="/dashboard/admin/moderation"
+              href="/dashboard/admin/listings"
               variant="onBrand"
-              icon={<RiShieldCheckLine className="text-base" />}
+              icon={<RiCarLine className="text-base" />}
             >
-              Review queue
+              Manage listings
             </DashLinkButton>
           ) : (
             <DashLinkButton href="/listings" variant="onBrand" icon={<RiSearchLine className="text-base" />}>
@@ -172,10 +171,10 @@ export default function DashboardHomePage() {
               value={stats?.pending ?? 0}
               icon={<RiTimeLine />}
               tone="red"
-              href="/dashboard/admin/moderation"
-              linkLabel="Open queue"
+              href="/dashboard/admin/listings"
+              linkLabel="Open listings"
             />
-            <StatCard label="Live listings" value={stats?.approved ?? 0} icon={<RiCheckboxCircleLine />} />
+            <StatCard label="Live listings" value={stats?.approved ?? 0} icon={<RiCheckboxCircleLine />} href="/dashboard/admin/listings" linkLabel="View live" />
             <StatCard label="Total leads" value={stats?.leads ?? 0} icon={<RiUserStarLine />} />
           </div>
 
@@ -208,12 +207,12 @@ export default function DashboardHomePage() {
             </Panel>
 
             <Panel
-              title="Moderation queue"
-              description="Newest submissions waiting on a decision"
-              icon={<RiShieldCheckLine />}
+              title="Recent listings"
+              description="Newest submissions across the marketplace"
+              icon={<RiCarLine />}
               action={
                 <Link
-                  href="/dashboard/admin/moderation"
+                  href="/dashboard/admin/listings"
                   className="inline-flex items-center gap-1 text-xs font-semibold text-brand transition-colors hover:text-brand-red"
                 >
                   View all <RiArrowRightLine />
@@ -231,7 +230,7 @@ export default function DashboardHomePage() {
                 pending.map((item) => (
                   <Link
                     key={item.id}
-                    href="/dashboard/admin/moderation"
+                    href="/dashboard/admin/listings"
                     className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-brand/4 sm:px-5"
                   >
                     <RowThumb name={item.title} monogram={item.make?.name} src={primaryImage(item)} size={44} />

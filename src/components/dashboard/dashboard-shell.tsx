@@ -16,7 +16,6 @@ import {
   RiLogoutBoxRLine,
   RiNotification3Line,
   RiSearchLine,
-  RiShieldCheckLine,
   RiShieldUserLine,
   RiTruckLine,
   RiUserLine,
@@ -95,7 +94,7 @@ const NAV: Record<UserRole, NavGroup[]> = {
     {
       label: "Manage",
       items: [
-        { href: "/dashboard/admin/moderation", label: "Moderation", icon: RiShieldCheckLine },
+        { href: "/dashboard/admin/listings", label: "Listings", icon: RiCarLine },
         { href: "/dashboard/admin/users", label: "Users", icon: RiShieldUserLine },
         { href: "/dashboard/admin/taxonomy", label: "Taxonomy", icon: RiListSettingsLine },
       ],
@@ -117,7 +116,7 @@ const CRUMB_LABELS: Record<string, string> = {
   profile: "Profile",
   admin: "Admin",
   users: "Users",
-  moderation: "Moderation",
+  moderation: "Listings",
   taxonomy: "Taxonomy",
 };
 
@@ -145,11 +144,14 @@ export default function DashboardShell({ children }: { children: React.ReactNode
   const crumbs = useMemo(() => {
     // Drop record ids (e.g. /dashboard/messages/<objectId>) so the trail stays readable.
     const segments = pathname.split("/").filter(Boolean).filter((segment) => !/^[a-f0-9]{24}$/i.test(segment));
-    return segments.map((segment, index) => ({
-      label: CRUMB_LABELS[segment] || segment.replace(/-/g, " "),
-      href: `/${segments.slice(0, index + 1).join("/")}`,
-      last: index === segments.length - 1,
-    }));
+    return segments.map((segment, index) => {
+      const adminListings = segment === "listings" && segments.includes("admin");
+      return {
+        label: adminListings ? "Listings" : CRUMB_LABELS[segment] || segment.replace(/-/g, " "),
+        href: `/${segments.slice(0, index + 1).join("/")}`,
+        last: index === segments.length - 1,
+      };
+    });
   }, [pathname]);
 
   useGSAP(
