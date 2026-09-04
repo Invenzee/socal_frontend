@@ -27,12 +27,21 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const socketUrl = process.env.SOCKET_PUBLIC_URL || process.env.NEXT_PUBLIC_SOCKET_URL || "";
+
   return (
     <html
       lang="en"
       className={`${momoTrustDisplay.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden bg-white font-sans text-black">
+        {socketUrl ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.__SOCAL_SOCKET_URL__=${JSON.stringify(socketUrl)};`,
+            }}
+          />
+        ) : null}
         <AppProviders>
           <Header />
           <div className="flex-1">{children}</div>
