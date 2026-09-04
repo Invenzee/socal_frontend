@@ -121,7 +121,7 @@ const CRUMB_LABELS: Record<string, string> = {
 };
 
 function initials(name: string) {
-  return name
+  return (name || "")
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)

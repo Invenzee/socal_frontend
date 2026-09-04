@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const RING = [
@@ -54,7 +53,8 @@ export default function RowThumb({
         className={cn("relative block shrink-0 overflow-hidden bg-neutral-200 ring-1 ring-black/8", radius, className)}
         style={{ width: size, height: size }}
       >
-        <Image src={src} alt={name} fill sizes={`${size}px`} className="object-cover" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={name} className="size-full object-cover" />
       </span>
     );
   }

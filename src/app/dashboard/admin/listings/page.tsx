@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -211,7 +210,7 @@ export default function AdminListingsPage() {
       <DataTable
         columns={columns}
         rows={rows}
-        rowId={(row) => row.id}
+        rowId={(row) => row.id || ""}
         loading={loading}
         search={{
           value: search,
@@ -294,12 +293,11 @@ export default function AdminListingsPage() {
             <>
               <div className="relative aspect-[16/8] w-full bg-neutral-200">
                 {primaryImage(review) ? (
-                  <Image
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
                     src={primaryImage(review) as string}
                     alt={review.title}
-                    fill
-                    sizes="640px"
-                    className="object-cover"
+                    className="size-full object-cover"
                   />
                 ) : (
                   <span className="grid size-full place-items-center text-xs font-medium text-black/35">
@@ -348,7 +346,8 @@ export default function AdminListingsPage() {
                         key={image.publicId}
                         className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-neutral-200"
                       >
-                        <Image src={image.url} alt="" fill sizes="64px" className="object-cover" />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={image.url} alt="" className="size-full object-cover" />
                       </span>
                     ))}
                   </div>
