@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   RiCheckboxCircleLine,
+  RiDeleteBin6Line,
   RiForbid2Line,
   RiGroupLine,
   RiMailLine,
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { api, ApiRequestError } from "@/lib/api";
+import { useAuth } from "@/providers/auth-provider";
 import type { AdminUser, PaginationMeta, UserRole } from "@/types/api";
 
 const ROLE_OPTIONS = [
@@ -44,7 +46,12 @@ const STATUS_OPTIONS = [
   { value: "suspended", label: "Suspended" },
 ];
 
+function isAdminMember(row: AdminUser) {
+  return row.role === "admin" || row.originalRole === "admin";
+}
+
 export default function AdminUsersPage() {
+  const { user } = useAuth();
   const [rows, setRows] = useState<AdminUser[]>([]);
   const [meta, setMeta] = useState<PaginationMeta>({ total: 0, page: 1, limit: 10, totalPages: 1 });
   const [loading, setLoading] = useState(true);
@@ -55,7 +62,9 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selected, setSelected] = useState<string[]>([]);
-  const [confirm, setConfirm] = useState<{ ids: string[]; next: "active" | "suspended" } | null>(null);
+  const [confirm, setConfirm] = useState<
+    { type: "suspend"; ids: string[] } | { type: "delete"; ids: string[] } | null
+  >(null);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setDebounced(search), 350);
@@ -101,6 +110,34 @@ export default function AdminUsersPage() {
       await load();
     } catch (error) {
       toast.error(error instanceof ApiRequestError ? error.message : "Update failed");
+    }
+  }
+
+  function deletableIds(ids: string[]) {
+    return ids.filter((id) => {
+      if (user?.id && id === user.id) return false;
+      const row = rows.find((member) => member.id === id);
+      return !row || !isAdminMember(row);
+    });
+  }
+
+  function requestDelete(ids: string[]) {
+    const next = deletableIds(ids);
+    if (!next.length) {
+      toast.error("Admin accounts cannot be deleted.");
+      return;
+    }
+    setConfirm({ type: "delete", ids: next });
+  }
+
+  async function removeUsers(ids: string[]) {
+    try {
+      await Promise.all(ids.map((id) => api(`/admin/users/${id}`, { method: "DELETE" })));
+      toast.success(ids.length > 1 ? `${ids.length} members deleted` : "Member deleted");
+      setSelected((prev) => prev.filter((id) => !ids.includes(id)));
+      await load();
+    } catch (error) {
+      toast.error(error instanceof ApiRequestError ? error.message : "Delete failed");
     }
   }
 
@@ -171,7 +208,7 @@ export default function AdminUsersPage() {
       <PageHeader
         eyebrow="Admin"
         title="Members"
-        description="Search the member base, change roles and suspend problem accounts."
+        description="Search the member base, change roles, suspend accounts, or permanently delete members."
         actions={
           <DashButton
             variant="onBrandGhost"
@@ -234,9 +271,17 @@ export default function AdminUsersPage() {
               variant="red"
               size="sm"
               icon={<RiForbid2Line className="text-sm" />}
-              onClick={() => setConfirm({ ids, next: "suspended" })}
+              onClick={() => setConfirm({ type: "suspend", ids })}
             >
               Suspend
+            </DashButton>
+            <DashButton
+              variant="onBrand"
+              size="sm"
+              icon={<RiDeleteBin6Line className="text-sm" />}
+              onClick={() => requestDelete(ids)}
+            >
+              Delete
             </DashButton>
           </>
         )}
@@ -289,7 +334,7 @@ export default function AdminUsersPage() {
                     label="Suspend account"
                     icon={<RiForbid2Line />}
                     tone="red"
-                    onClick={() => setConfirm({ ids: [row.id], next: "suspended" })}
+                    onClick={() => setConfirm({ type: "suspend", ids: [row.id] })}
                   />
                 ) : (
                   <ActionIcon
@@ -298,6 +343,12 @@ export default function AdminUsersPage() {
                     onClick={() => void patch([row.id], { status: "active" }, `${row.fullName} activated`)}
                   />
                 )}
+                <ActionIcon
+                  label="Delete member"
+                  icon={<RiDeleteBin6Line />}
+                  tone="red"
+                  onClick={() => requestDelete([row.id])}
+                />
               </>
             )}
           </>
@@ -332,21 +383,28 @@ export default function AdminUsersPage() {
       <ConfirmDialog
         open={Boolean(confirm)}
         onOpenChange={(open) => !open && setConfirm(null)}
-        title="Suspend account?"
+        title={confirm?.type === "delete" ? "Delete member?" : "Suspend account?"}
         description={
-          confirm && confirm.ids.length > 1
-            ? `${confirm.ids.length} members will lose access until you reactivate them.`
-            : "This member will lose access until you reactivate the account."
+          confirm?.type === "delete"
+            ? confirm.ids.length > 1
+              ? `${confirm.ids.length} members and their listings, messages, and leads will be permanently removed. This cannot be undone.`
+              : "This member and their listings, messages, and leads will be permanently removed. This cannot be undone."
+            : confirm && confirm.ids.length > 1
+              ? `${confirm.ids.length} members will lose access until you reactivate them.`
+              : "This member will lose access until you reactivate the account."
         }
-        confirmLabel="Suspend"
+        confirmLabel={confirm?.type === "delete" ? "Delete" : "Suspend"}
         onConfirm={() => {
-          if (confirm) {
-            void patch(
-              confirm.ids,
-              { status: confirm.next },
-              confirm.ids.length > 1 ? `${confirm.ids.length} accounts suspended` : "Account suspended",
-            );
+          if (!confirm) return;
+          if (confirm.type === "delete") {
+            void removeUsers(confirm.ids);
+            return;
           }
+          void patch(
+            confirm.ids,
+            { status: "suspended" },
+            confirm.ids.length > 1 ? `${confirm.ids.length} accounts suspended` : "Account suspended",
+          );
         }}
       />
     </div>
