@@ -16,6 +16,11 @@ const STATUS_STYLES: Record<string, string> = {
   admin: "bg-black/85 text-white ring-black/20",
   seller: "bg-brand/10 text-brand ring-brand/25",
   buyer: "bg-brand-red/10 text-brand-red ring-brand-red/25",
+  new: "bg-brand/10 text-brand ring-brand/25",
+  contacted: "bg-black/6 text-black/60 ring-black/12",
+  offered: "bg-brand/10 text-brand ring-brand/25",
+  won: "bg-brand/10 text-brand ring-brand/25",
+  lost: "bg-brand-red/10 text-brand-red ring-brand-red/25",
 };
 
 const DOT_STYLES: Record<string, string> = {
@@ -32,6 +37,11 @@ const DOT_STYLES: Record<string, string> = {
   admin: "bg-white",
   seller: "bg-brand",
   buyer: "bg-brand-red",
+  new: "bg-brand",
+  contacted: "bg-black/35",
+  offered: "bg-brand",
+  won: "bg-brand",
+  lost: "bg-brand-red",
 };
 
 export default function StatusPill({ status, className }: { status: string; className?: string }) {

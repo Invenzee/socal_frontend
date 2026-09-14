@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,6 +11,9 @@ import { RiCheckLine } from "react-icons/ri";
 import GetStartedActions from "@/components/get-started-actions";
 import Testimonials from "@/components/testimonials";
 import ReadyToListings from "@/components/ready-to-listings";
+import OfferHomeSection from "@/components/offer/offer-home-section";
+import { useAuth } from "@/providers/auth-provider";
+import { useOfferDialog } from "@/providers/offer-dialog-provider";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -36,12 +39,15 @@ const BRANDS = [
 ] as const;
 
 export default function Home() {
+  const router = useRouter();
+  const { user, loading } = useAuth();
+  const { requestOpen } = useOfferDialog();
   const heroRef = useRef<HTMLElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const pillRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLAnchorElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
   const sellRef = useRef<HTMLSpanElement>(null);
   const moveRef = useRef<HTMLElement>(null);
   const moveHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -420,13 +426,21 @@ export default function Home() {
             Get a Fast, Fair Offer Today.
           </p>
 
-          <Link
+          <button
             ref={ctaRef}
-            href="/sell"
-            className="mt-6 inline-flex items-center justify-center rounded-[8px] bg-brand px-8 py-3 text-base font-semibold text-white sm:mt-7 sm:px-10 sm:py-3.5 sm:text-lg"
+            type="button"
+            onClick={() => {
+              if (loading) return;
+              if (user) {
+                router.push("/sell");
+                return;
+              }
+              requestOpen();
+            }}
+            className="mt-6 inline-flex cursor-pointer items-center justify-center rounded-[8px] bg-brand px-8 py-3 text-base font-semibold text-white transition-all duration-150 hover:scale-[1.04] hover:brightness-110 sm:mt-7 sm:px-10 sm:py-3.5 sm:text-lg"
           >
-            Sell Your Truck
-          </Link>
+            {user?.role === "seller" || user?.role === "admin" ? "Sell Your Truck" : "Get an Offer"}
+          </button>
         </div>
       </section>
 
@@ -559,6 +573,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <OfferHomeSection />
 
       <section
         ref={brandsRef}

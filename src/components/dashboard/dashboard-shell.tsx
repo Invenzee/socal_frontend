@@ -11,6 +11,7 @@ import {
   RiChat3Line,
   RiDashboardLine,
   RiExternalLinkLine,
+  RiHandCoinLine,
   RiHeartLine,
   RiListSettingsLine,
   RiLogoutBoxRLine,
@@ -96,6 +97,7 @@ const NAV: Record<UserRole, NavGroup[]> = {
       label: "Manage",
       items: [
         { href: "/dashboard/admin/listings", label: "Listings", icon: RiCarLine },
+        { href: "/dashboard/admin/offers", label: "Offer leads", icon: RiHandCoinLine },
         { href: "/dashboard/admin/users", label: "Users", icon: RiShieldUserLine },
         { href: "/dashboard/admin/taxonomy", label: "Taxonomy", icon: RiListSettingsLine },
       ],
@@ -117,6 +119,7 @@ const CRUMB_LABELS: Record<string, string> = {
   profile: "Profile",
   admin: "Admin",
   users: "Users",
+  offers: "Offer leads",
   moderation: "Listings",
   taxonomy: "Taxonomy",
 };

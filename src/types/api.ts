@@ -120,6 +120,30 @@ export type Lead = {
   seller?: { fullName: string; email: string };
 };
 
+export type OfferStatus = "new" | "contacted" | "offered" | "won" | "lost";
+
+export type OfferLead = {
+  id: string;
+  guestId: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  phoneCountry: string;
+  licensePlate: string;
+  year: number;
+  mileage: number;
+  city: string;
+  zip: string;
+  status: OfferStatus;
+  offerPrice: number | null;
+  offerMessage: string;
+  offeredAt: string | null;
+  createdAt: string;
+  make?: TaxonomyItem | string;
+  model?: TaxonomyItem | string;
+  condition?: TaxonomyItem | string;
+};
+
 export type AdminStats = {
   users: number;
   listings: number;
