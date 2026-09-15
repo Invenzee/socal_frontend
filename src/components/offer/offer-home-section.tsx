@@ -52,7 +52,7 @@ export default function OfferHomeSection() {
 
   if (user?.role === "buyer") {
     return (
-      <section ref={sectionRef} className="bg-white py-16 sm:py-20 lg:py-24">
+      <section ref={sectionRef} className="bg-brand/8 py-16 sm:py-20 lg:py-24">
         <div className="container-site text-center">
           <h2
             data-offer-reveal
@@ -77,7 +77,7 @@ export default function OfferHomeSection() {
   }
 
   return (
-    <section ref={sectionRef} className="bg-white py-16 sm:py-20 lg:py-24">
+    <section ref={sectionRef} className="bg-brand/8 py-16 sm:py-20 lg:py-24">
       <div className="container-site">
         <div className="mx-auto max-w-3xl text-center">
           <h2
@@ -92,12 +92,18 @@ export default function OfferHomeSection() {
               : "Tell us a few details about your truck. No account needed."}
           </p>
         </div>
-        <div data-offer-reveal className="mx-auto mt-8 max-w-4xl sm:mt-10">
-          {submitted ? <OfferNextSteps /> : <OfferForm />}
+        <div data-offer-reveal className="mx-auto mt-8 max-w-4xl rounded-2xl bg-brand p-5 shadow-[0_16px_0_0_var(--color-brand-red)] sm:mt-10 sm:p-8">
+          {submitted ? (
+            <div className="rounded-xl bg-white px-4 py-6">
+              <OfferNextSteps />
+            </div>
+          ) : (
+            <OfferForm tone="brand" />
+          )}
           {submitted ? null : (
-            <p className="mt-4 text-center text-sm text-black/45">
+            <p className="mt-4 text-center text-sm text-white/75">
               Prefer more room?{" "}
-              <Link href="/get-an-offer" className="font-semibold text-brand hover:text-brand-red">
+              <Link href="/get-an-offer" className="font-semibold text-white underline underline-offset-4 hover:text-white">
                 Open the full page
               </Link>
             </p>

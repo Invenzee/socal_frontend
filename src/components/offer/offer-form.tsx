@@ -17,17 +17,36 @@ const YEARS = Array.from({ length: currentYear + 1 - 1950 + 1 }, (_, index) => S
 
 type OfferFormProps = {
   compact?: boolean;
+  tone?: "plain" | "brand";
   onSuccess?: () => void;
   className?: string;
 };
 
-function FieldShell({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function FieldShell({
+  children,
+  className = "",
+  tone = "plain",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  tone?: "plain" | "brand";
+}) {
   return (
-    <div className={cn("rounded-lg border border-black/8 bg-white px-4 py-3.5", className)}>{children}</div>
+    <div
+      className={cn(
+        "rounded-lg border bg-white px-4 py-3.5",
+        tone === "brand"
+          ? "border-brand/30 shadow-xs focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/20"
+          : "border-black/8",
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }
 
-export default function OfferForm({ compact = false, onSuccess, className }: OfferFormProps) {
+export default function OfferForm({ compact = false, tone = "plain", onSuccess, className }: OfferFormProps) {
   const router = useRouter();
   const [taxonomy, setTaxonomy] = useState<{ makes: TaxonomyItem[]; conditions: TaxonomyItem[] }>({
     makes: [],
@@ -117,30 +136,39 @@ export default function OfferForm({ compact = false, onSuccess, className }: Off
     <form onSubmit={onSubmit} className={cn("space-y-4", className)}>
       {error ? <p className="text-sm font-medium text-brand-red">{error}</p> : null}
       <div className={cn("grid grid-cols-1 gap-3", compact ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3")}>
-        <TextField placeholder="Full name" value={form.fullName} onChange={(value) => setField("fullName", value)} required />
         <TextField
+          tone={tone}
+          placeholder="Full name"
+          value={form.fullName}
+          onChange={(value) => setField("fullName", value)}
+          required
+        />
+        <TextField
+          tone={tone}
           placeholder="Email"
           type="email"
           value={form.email}
           onChange={(value) => setField("email", value)}
           required
         />
-        <FieldShell className={compact ? "sm:col-span-2" : "lg:col-span-1"}>
+        <FieldShell tone={tone} className={compact ? "sm:col-span-2" : "lg:col-span-1"}>
           <PhoneInput
             international
             defaultCountry="US"
             value={form.phone}
             onChange={(value) => setField("phone", value || "")}
-            className="phone-input !border-0 !p-0"
+            className="phone-input !border-0 !bg-transparent !p-0"
           />
         </FieldShell>
         <TextField
+          tone={tone}
           placeholder="License plate"
           value={form.licensePlate}
           onChange={(value) => setField("licensePlate", value)}
           required
         />
         <SelectField
+          tone={tone}
           placeholder="Year"
           value={form.year}
           onChange={(value) => setField("year", value)}
@@ -148,6 +176,7 @@ export default function OfferForm({ compact = false, onSuccess, className }: Off
           required
         />
         <SelectField
+          tone={tone}
           placeholder="Make"
           value={form.make}
           onChange={(value) => {
@@ -157,8 +186,16 @@ export default function OfferForm({ compact = false, onSuccess, className }: Off
           options={taxonomy.makes}
           required
         />
-        <SelectField placeholder="Model" value={form.model} onChange={(value) => setField("model", value)} options={models} required />
+        <SelectField
+          tone={tone}
+          placeholder="Model"
+          value={form.model}
+          onChange={(value) => setField("model", value)}
+          options={models}
+          required
+        />
         <TextField
+          tone={tone}
           placeholder="Mileage"
           type="number"
           value={form.mileage}
@@ -166,20 +203,25 @@ export default function OfferForm({ compact = false, onSuccess, className }: Off
           required
         />
         <SelectField
+          tone={tone}
           placeholder="Condition"
           value={form.condition}
           onChange={(value) => setField("condition", value)}
           options={taxonomy.conditions}
           required
         />
-        <TextField placeholder="City" value={form.city} onChange={(value) => setField("city", value)} required />
-        <TextField placeholder="ZIP" value={form.zip} onChange={(value) => setField("zip", value)} required />
+        <TextField tone={tone} placeholder="City" value={form.city} onChange={(value) => setField("city", value)} required />
+        <TextField tone={tone} placeholder="ZIP" value={form.zip} onChange={(value) => setField("zip", value)} required />
       </div>
-      <div className={cn("flex", compact ? "justify-end" : "justify-center pt-2")}>
+      <div className={cn("flex", compact ? "justify-stretch sm:justify-end" : "justify-center pt-2")}>
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex min-w-[180px] cursor-pointer items-center justify-center rounded-[8px] bg-brand px-8 py-3 text-sm font-semibold text-white transition-all duration-150 hover:brightness-110 sm:text-base"
+          className={cn(
+            "inline-flex min-w-[180px] cursor-pointer items-center justify-center rounded-[8px] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-150 hover:scale-[1.02] hover:brightness-110 sm:text-base",
+            compact && "w-full sm:w-auto",
+            tone === "brand" ? "bg-brand-red shadow-md" : "bg-brand",
+          )}
         >
           {submitting ? "Submitting..." : "Get an offer"}
         </button>
@@ -194,15 +236,17 @@ function TextField({
   onChange,
   type = "text",
   required,
+  tone = "plain",
 }: {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
   type?: string;
   required?: boolean;
+  tone?: "plain" | "brand";
 }) {
   return (
-    <FieldShell>
+    <FieldShell tone={tone}>
       <input
         type={type}
         value={value}
@@ -222,15 +266,17 @@ function SelectField({
   onChange,
   options,
   required,
+  tone = "plain",
 }: {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
   options: Array<{ id: string; name: string }>;
   required?: boolean;
+  tone?: "plain" | "brand";
 }) {
   return (
-    <FieldShell className="relative">
+    <FieldShell tone={tone} className="relative">
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -244,7 +290,12 @@ function SelectField({
           </option>
         ))}
       </select>
-      <RiArrowDownSLine className="pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2 text-black/35" />
+      <RiArrowDownSLine
+        className={cn(
+          "pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2",
+          tone === "brand" ? "text-brand" : "text-black/35",
+        )}
+      />
     </FieldShell>
   );
 }

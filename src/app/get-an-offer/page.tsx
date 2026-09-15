@@ -60,8 +60,14 @@ export default function GetAnOfferPage() {
               : "A few details about your truck is all we need. No account required."}
           </p>
         </div>
-        <div data-offer-page className="mx-auto mt-8 max-w-4xl sm:mt-10">
-          {submitted ? <OfferNextSteps /> : <OfferForm />}
+        <div data-offer-page className="mx-auto mt-8 max-w-4xl rounded-2xl bg-brand p-5 shadow-[0_16px_0_0_var(--color-brand-red)] sm:mt-10 sm:p-8">
+          {submitted ? (
+            <div className="rounded-xl bg-white px-4 py-6">
+              <OfferNextSteps />
+            </div>
+          ) : (
+            <OfferForm tone="brand" />
+          )}
         </div>
       </div>
     </main>
