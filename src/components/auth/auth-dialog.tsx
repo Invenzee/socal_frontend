@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { isPossiblePhoneNumber } from "libphonenumber-js";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -70,7 +70,7 @@ export default function AuthDialog() {
   async function onSignup(event: React.FormEvent) {
     event.preventDefault();
     setError("");
-    if (!signup.phone || !isValidPhoneNumber(signup.phone)) {
+    if (!signup.phone || !isPossiblePhoneNumber(signup.phone)) {
       setError("Enter a valid phone number for the selected country.");
       return;
     }

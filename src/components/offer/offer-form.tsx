@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { isPossiblePhoneNumber } from "libphonenumber-js";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { toast } from "sonner";
 import { api, ApiRequestError } from "@/lib/api";
@@ -92,7 +92,7 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
-    if (!form.phone || !isValidPhoneNumber(form.phone)) {
+    if (!form.phone || !isPossiblePhoneNumber(form.phone)) {
       setError("Enter a valid phone number for the selected country.");
       return;
     }

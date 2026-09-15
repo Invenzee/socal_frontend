@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { isPossiblePhoneNumber } from "libphonenumber-js";
 import { toast } from "sonner";
 import { AuthShell, AuthField, AuthSubmitButton } from "@/components/auth/auth-shell";
 import { api, ApiRequestError } from "@/lib/api";
@@ -26,7 +26,7 @@ export default function RegisterForm() {
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!phone || !isValidPhoneNumber(phone)) {
+    if (!phone || !isPossiblePhoneNumber(phone)) {
       toast.error("Enter a valid phone number for the selected country.");
       return;
     }
