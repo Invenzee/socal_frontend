@@ -1,22 +1,36 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
+  RiCheckboxCircleLine,
+  RiCloseCircleLine,
   RiDeleteBin6Line,
+  RiEyeLine,
+  RiFlagLine,
   RiHandCoinLine,
   RiMailSendLine,
   RiPhoneLine,
+  RiPriceTag3Line,
   RiRefreshLine,
+  RiUserVoiceLine,
 } from "react-icons/ri";
 import PageHeader from "@/components/dashboard/page-header";
 import DataTable, { type Column } from "@/components/dashboard/data-table";
 import DashSelect from "@/components/dashboard/dash-select";
 import ActionIcon from "@/components/dashboard/action-icon";
-import StatusPill from "@/components/dashboard/status-pill";
 import EmptyState from "@/components/dashboard/empty-state";
 import ConfirmDialog from "@/components/dashboard/confirm-dialog";
 import { DashButton } from "@/components/dashboard/dash-button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Dialog,
   DialogContent,
@@ -41,7 +55,16 @@ const STATUS_OPTIONS = [
   { value: "lost", label: "Lost" },
 ];
 
-const ROW_STATUS_OPTIONS = STATUS_OPTIONS.filter((option) => option.value);
+const STATUS_META: Record<
+  OfferStatus,
+  { label: string; icon: typeof RiFlagLine; className: string }
+> = {
+  new: { label: "New", icon: RiFlagLine, className: "text-brand hover:bg-brand hover:text-white" },
+  contacted: { label: "Contacted", icon: RiUserVoiceLine, className: "text-brand hover:bg-brand hover:text-white" },
+  offered: { label: "Offered", icon: RiPriceTag3Line, className: "text-brand-red hover:bg-brand-red hover:text-white" },
+  won: { label: "Won", icon: RiCheckboxCircleLine, className: "text-brand hover:bg-brand hover:text-white" },
+  lost: { label: "Lost", icon: RiCloseCircleLine, className: "text-brand-red hover:bg-brand-red hover:text-white" },
+};
 
 function taxName(value?: TaxonomyItem | string) {
   if (!value) return "—";
@@ -59,6 +82,7 @@ export default function AdminOffersPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [viewTarget, setViewTarget] = useState<OfferLead | null>(null);
   const [emailTarget, setEmailTarget] = useState<OfferLead | null>(null);
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState("");
@@ -170,39 +194,7 @@ export default function AdminOffersPage() {
           <p className="truncate font-medium text-black">
             {row.year} {taxName(row.make)} {taxName(row.model)}
           </p>
-          <p className="truncate text-xs text-black/45">
-            {row.licensePlate} · {row.mileage.toLocaleString("en-US")} mi
-          </p>
         </div>
-      ),
-    },
-    {
-      id: "location",
-      header: "Location",
-      hideBelow: "lg",
-      cell: (row) => (
-        <span className="text-sm">
-          {row.city}, {row.zip}
-        </span>
-      ),
-    },
-    { id: "status", header: "Status", cell: (row) => <StatusPill status={row.status} /> },
-    {
-      id: "offer",
-      header: "Last offer",
-      hideBelow: "md",
-      cell: (row) => <span className="tabular-nums">{row.offerPrice ? formatPrice(row.offerPrice) : "—"}</span>,
-    },
-    {
-      id: "received",
-      header: "Received",
-      hideBelow: "xl",
-      cell: (row) => (
-        <span className="text-xs text-black/50">
-          {row.createdAt
-            ? new Date(row.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-            : "—"}
-        </span>
       ),
     },
   ];
@@ -249,22 +241,53 @@ export default function AdminOffersPage() {
             className="w-44"
           />
         }
-        rowActions={(row) => (
-          <>
-            {row.phone ? (
-              <ActionIcon label="Call" icon={<RiPhoneLine />} tone="red" href={`tel:${row.phone}`} />
-            ) : null}
-            <ActionIcon label="Send offer" icon={<RiMailSendLine />} onClick={() => setEmailTarget(row)} />
-            <DashSelect
-              ariaLabel="Change status"
-              value={row.status}
-              onChange={(value) => void patchStatus(row.id, value as OfferStatus)}
-              options={ROW_STATUS_OPTIONS}
-              className="h-8 w-[132px]"
-            />
-            <ActionIcon label="Delete lead" icon={<RiDeleteBin6Line />} tone="red" onClick={() => setConfirmId(row.id)} />
-          </>
-        )}
+        rowActions={(row) => {
+          const meta = STATUS_META[row.status];
+          const StatusIcon = meta.icon;
+          return (
+            <>
+              <ActionIcon label="View details" icon={<RiEyeLine />} onClick={() => setViewTarget(row)} />
+              {row.phone ? (
+                <ActionIcon label="Call" icon={<RiPhoneLine />} tone="red" href={`tel:${row.phone}`} />
+              ) : null}
+              <ActionIcon label="Send offer" icon={<RiMailSendLine />} onClick={() => setEmailTarget(row)} />
+              <DropdownMenu>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <DropdownMenuTrigger
+                        render={
+                          <button
+                            type="button"
+                            aria-label={`Status: ${meta.label}`}
+                            className={`inline-flex size-8 cursor-pointer items-center justify-center rounded-lg border border-black/8 bg-white text-[15px] shadow-xs transition-all duration-150 hover:-translate-y-px hover:border-transparent ${meta.className}`}
+                          >
+                            <StatusIcon />
+                          </button>
+                        }
+                      />
+                    }
+                  />
+                  <TooltipContent className="bg-brand text-white">Status: {meta.label}</TooltipContent>
+                </Tooltip>
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuLabel>Change status</DropdownMenuLabel>
+                  <DropdownMenuRadioGroup
+                    value={row.status}
+                    onValueChange={(value) => void patchStatus(row.id, value as OfferStatus)}
+                  >
+                    {(Object.keys(STATUS_META) as OfferStatus[]).map((value) => (
+                      <DropdownMenuRadioItem key={value} value={value} className="cursor-pointer">
+                        {STATUS_META[value].label}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <ActionIcon label="Delete lead" icon={<RiDeleteBin6Line />} tone="red" onClick={() => setConfirmId(row.id)} />
+            </>
+          );
+        }}
         page={meta.page}
         totalPages={meta.totalPages}
         total={meta.total}
@@ -293,6 +316,84 @@ export default function AdminOffersPage() {
           if (confirmId) void removeOffer(confirmId);
         }}
       />
+
+      <Dialog
+        open={Boolean(viewTarget)}
+        onOpenChange={(open) => !open && setViewTarget(null)}
+      >
+        <DialogContent className="max-w-lg border-black/10 bg-white sm:rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="font-heading text-xl text-black">Offer lead</DialogTitle>
+            <DialogDescription className="text-sm text-black/60">
+              {viewTarget ? `${viewTarget.fullName} · ${STATUS_META[viewTarget.status].label}` : ""}
+            </DialogDescription>
+          </DialogHeader>
+          {viewTarget ? (
+            <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+              <Detail label="Email" value={viewTarget.email} />
+              <Detail
+                label="Phone"
+                value={
+                  viewTarget.phone ? (
+                    <a href={`tel:${viewTarget.phone}`} className="font-semibold text-brand hover:text-brand-red">
+                      {viewTarget.phone}
+                    </a>
+                  ) : (
+                    "—"
+                  )
+                }
+              />
+              <Detail
+                label="Vehicle"
+                value={`${viewTarget.year} ${taxName(viewTarget.make)} ${taxName(viewTarget.model)}`}
+              />
+              <Detail label="Condition" value={taxName(viewTarget.condition)} />
+              <Detail label="License plate" value={viewTarget.licensePlate || "—"} />
+              <Detail label="Mileage" value={`${viewTarget.mileage.toLocaleString("en-US")} mi`} />
+              <Detail label="Location" value={`${viewTarget.city}, ${viewTarget.zip}`} />
+              <Detail label="Last offer" value={viewTarget.offerPrice ? formatPrice(viewTarget.offerPrice) : "—"} />
+              <Detail
+                label="Received"
+                value={
+                  viewTarget.createdAt
+                    ? new Date(viewTarget.createdAt).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    : "—"
+                }
+              />
+              {viewTarget.offerMessage ? (
+                <div className="sm:col-span-2">
+                  <Detail label="Offer message" value={viewTarget.offerMessage} />
+                </div>
+              ) : null}
+            </dl>
+          ) : null}
+          <DialogFooter className="border-0 bg-transparent">
+            {viewTarget?.phone ? (
+              <a
+                href={`tel:${viewTarget.phone}`}
+                className="inline-flex h-8 items-center justify-center rounded-lg bg-brand-red px-3 text-sm font-medium text-white hover:bg-brand-red/90"
+              >
+                Call
+              </a>
+            ) : null}
+            <Button
+              type="button"
+              className="bg-brand text-white hover:bg-brand/90"
+              onClick={() => {
+                if (!viewTarget) return;
+                setEmailTarget(viewTarget);
+                setViewTarget(null);
+              }}
+            >
+              Send offer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={Boolean(emailTarget)}
@@ -346,6 +447,15 @@ export default function AdminOffersPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function Detail({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-[11px] font-semibold tracking-[0.12em] text-black/40 uppercase">{label}</dt>
+      <dd className="mt-1 truncate font-medium text-black">{value}</dd>
     </div>
   );
 }
