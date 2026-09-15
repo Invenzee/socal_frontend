@@ -4,10 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   RiDeleteBin6Line,
-  RiFileCopyLine,
   RiHandCoinLine,
-  RiMailLine,
   RiMailSendLine,
+  RiPhoneLine,
   RiRefreshLine,
 } from "react-icons/ri";
 import PageHeader from "@/components/dashboard/page-header";
@@ -140,13 +139,6 @@ export default function AdminOffersPage() {
     }
   }
 
-  function copyEmail(email: string) {
-    void navigator.clipboard.writeText(email).then(
-      () => toast.success("Email copied"),
-      () => toast.error("Could not copy email"),
-    );
-  }
-
   const columns: Array<Column<OfferLead>> = [
     {
       id: "seller",
@@ -157,6 +149,18 @@ export default function AdminOffersPage() {
           <p className="truncate text-xs text-black/45">{row.email}</p>
         </div>
       ),
+    },
+    {
+      id: "phone",
+      header: "Phone",
+      cell: (row) =>
+        row.phone ? (
+          <a href={`tel:${row.phone}`} className="font-semibold tabular-nums text-brand hover:text-brand-red">
+            {row.phone}
+          </a>
+        ) : (
+          <span>—</span>
+        ),
     },
     {
       id: "vehicle",
@@ -234,7 +238,7 @@ export default function AdminOffersPage() {
             setSearch(value);
             setPage(1);
           },
-          placeholder: "Search name, email, or plate…",
+          placeholder: "Search name, email, phone, or plate…",
         }}
         filters={
           <DashSelect
@@ -247,8 +251,9 @@ export default function AdminOffersPage() {
         }
         rowActions={(row) => (
           <>
-            <ActionIcon label="Email seller" icon={<RiMailLine />} tone="neutral" href={`mailto:${row.email}`} />
-            <ActionIcon label="Copy email" icon={<RiFileCopyLine />} tone="neutral" onClick={() => copyEmail(row.email)} />
+            {row.phone ? (
+              <ActionIcon label="Call" icon={<RiPhoneLine />} tone="red" href={`tel:${row.phone}`} />
+            ) : null}
             <ActionIcon label="Send offer" icon={<RiMailSendLine />} onClick={() => setEmailTarget(row)} />
             <DashSelect
               ariaLabel="Change status"
