@@ -14,7 +14,7 @@ import OfferForm from "@/components/offer/offer-form";
 gsap.registerPlugin(useGSAP);
 
 const SKIP_PREFIXES = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email", "/dashboard"];
-const SKIP_EXACT = ["/get-an-offer", "/get-an-offer/thank-you"];
+const SKIP_EXACT = ["/get-an-offer", "/get-an-offer/thank-you", "/sell"];
 
 export default function OfferPopup() {
   const pathname = usePathname();

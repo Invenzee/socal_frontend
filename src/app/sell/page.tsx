@@ -5,11 +5,16 @@ import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { RiArrowDownSLine, RiUploadCloud2Line } from "react-icons/ri";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { isPossiblePhoneNumber } from "libphonenumber-js";
 import { toast } from "sonner";
-import { api, ApiRequestError } from "@/lib/api";
+import { api, ApiRequestError, entityId } from "@/lib/api";
 import { uploadListingImage } from "@/lib/cloudinary";
+import { getGuestId } from "@/lib/guest";
 import { useAuth } from "@/providers/auth-provider";
-import type { ListingImage, TaxonomyItem } from "@/types/api";
+import { useAuthDialog } from "@/providers/auth-dialog-provider";
+import type { ListingImage, OfferLead, TaxonomyItem } from "@/types/api";
 
 gsap.registerPlugin(useGSAP);
 
@@ -50,8 +55,10 @@ function SelectInput({ placeholder, value, onChange, options, active = false }: 
 export default function SellPage() {
   const router = useRouter();
   const { user, loading, setUser } = useAuth();
+  const { requestAuth } = useAuthDialog();
   const pageRef = useRef<HTMLElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const didPrefillTitle = useRef(false);
   const [taxonomy, setTaxonomy] = useState<{
     makes: TaxonomyItem[];
     features: TaxonomyItem[];
@@ -82,6 +89,14 @@ export default function SellPage() {
     exteriorColor: "",
     description: "",
   });
+  const [offerLead, setOfferLead] = useState<OfferLead | null>(null);
+  const [offerReady, setOfferReady] = useState(false);
+  const [pendingModel, setPendingModel] = useState("");
+  const [guestContact, setGuestContact] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+  });
 
   const setField = (key: keyof typeof form, value: string | string[]) => setForm((prev) => ({ ...prev, [key]: value }));
 
@@ -100,6 +115,52 @@ export default function SellPage() {
       .then((data) => setModels(data.items))
       .catch(() => setModels([]));
   }, [form.make]);
+
+  useEffect(() => {
+    if (loading) return;
+    if (user) {
+      setOfferReady(true);
+      return;
+    }
+    const guestId = getGuestId();
+    void api<{ item: OfferLead | null }>(`/offers/latest?guestId=${encodeURIComponent(guestId)}`)
+      .then((data) => {
+        const item = data.item;
+        if (!item) return;
+        setOfferLead(item);
+        setGuestContact({
+          fullName: item.fullName,
+          email: item.email,
+          phone: item.phone,
+        });
+        setForm((prev) => ({
+          ...prev,
+          year: String(item.year || prev.year),
+          mileage: String(item.mileage ?? prev.mileage),
+          licensePlate: item.licensePlate || prev.licensePlate,
+          make: entityId(item.make) || prev.make,
+          condition: entityId(item.condition) || prev.condition,
+        }));
+        setPendingModel(entityId(item.model));
+      })
+      .catch(() => undefined)
+      .finally(() => setOfferReady(true));
+  }, [loading, user]);
+
+  useEffect(() => {
+    if (!pendingModel || !models.some((item) => item.id === pendingModel)) return;
+    setField("model", pendingModel);
+    setPendingModel("");
+  }, [models, pendingModel]);
+
+  useEffect(() => {
+    if (didPrefillTitle.current || form.title || !form.year || !form.make) return;
+    const makeName = taxonomy.makes.find((item) => item.id === form.make)?.name;
+    const modelName = models.find((item) => item.id === form.model)?.name;
+    if (!makeName) return;
+    didPrefillTitle.current = true;
+    setField("title", [form.year, makeName, modelName].filter(Boolean).join(" "));
+  }, [form.title, form.year, form.make, form.model, taxonomy.makes, models]);
 
   useGSAP(
     () => {
@@ -147,48 +208,87 @@ export default function SellPage() {
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!user) {
-      router.push("/login?next=/sell");
+    if (images.length < 1) {
+      toast.error("Add at least one photo.");
       return;
     }
-    if (user.role === "buyer" && !user.canSell) {
-      toast.error("Switch to seller mode to list a vehicle.");
-      return;
+    if (user) {
+      if (user.role === "buyer" && !user.canSell) {
+        toast.error("Switch to seller mode to list a vehicle.");
+        return;
+      }
+      if (user.role === "buyer" && user.canSell) {
+        toast.error("Switch to seller mode to submit a listing.");
+        return;
+      }
+      if (!user.emailVerified) {
+        router.push("/verify-email?next=/sell");
+        return;
+      }
+    } else if (!offerLead) {
+      if (!guestContact.fullName.trim() || !guestContact.email.trim()) {
+        toast.error("Enter your name and email so we can send listing updates.");
+        return;
+      }
+      if (!guestContact.phone || !isPossiblePhoneNumber(guestContact.phone)) {
+        toast.error("Enter a valid phone number for this listing.");
+        return;
+      }
     }
-    if (user.role === "buyer" && user.canSell) {
-      toast.error("Switch to seller mode to submit a listing.");
-      return;
-    }
-    if (!user.emailVerified) {
-      router.push("/verify-email?next=/sell");
-      return;
-    }
+
+    const payload = {
+      title: form.title,
+      description: form.description,
+      year: Number(form.year),
+      mileage: Number(form.mileage),
+      price: Number(form.price),
+      make: form.make,
+      model: form.model,
+      category: form.category,
+      condition: form.condition,
+      fuel: form.fuel,
+      transmission: form.transmission,
+      features: form.features,
+      exteriorColor: form.exteriorColor,
+      vin: form.vin,
+      licensePlate: form.licensePlate,
+      state: form.state,
+      images,
+    };
+
     setSubmitting(true);
     try {
-      await api("/listings", {
+      if (user) {
+        await api("/listings", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        toast.success("Listing submitted for admin review.");
+        router.push("/dashboard/listings");
+        return;
+      }
+
+      await api("/listings/guest", {
         method: "POST",
         body: JSON.stringify({
-          title: form.title,
-          description: form.description,
-          year: Number(form.year),
-          mileage: Number(form.mileage),
-          price: Number(form.price),
-          make: form.make,
-          model: form.model,
-          category: form.category,
-          condition: form.condition,
-          fuel: form.fuel,
-          transmission: form.transmission,
-          features: form.features,
-          exteriorColor: form.exteriorColor,
-          vin: form.vin,
-          licensePlate: form.licensePlate,
-          state: form.state,
-          images,
+          ...payload,
+          guestId: getGuestId(),
+          ...(offerLead
+            ? {}
+            : {
+                guestName: guestContact.fullName.trim(),
+                guestEmail: guestContact.email.trim(),
+                guestPhone: guestContact.phone,
+              }),
         }),
       });
       toast.success("Listing submitted for admin review.");
-      router.push("/dashboard/listings");
+      requestAuth({
+        type: "claim-listing",
+        fullName: offerLead?.fullName || guestContact.fullName,
+        email: offerLead?.email || guestContact.email,
+        phone: offerLead?.phone || guestContact.phone,
+      });
     } catch (error) {
       toast.error(error instanceof ApiRequestError ? error.message : "Could not submit listing.");
     } finally {
@@ -200,18 +300,7 @@ export default function SellPage() {
     return <main className="container-site py-20 text-sm text-black/55">Loading...</main>;
   }
 
-  if (!user) {
-    return (
-      <main className="container-site py-20 text-center">
-        <h1 className="font-heading text-[clamp(1.75rem,6vw,50px)] text-black">Sign in to list your vehicle</h1>
-        <p className="mt-3 text-black/60">Sellers need an account before filling out the listing form.</p>
-        <a href="/login?next=/sell" className="mt-6 inline-flex rounded-lg bg-brand px-6 py-3 font-semibold text-white">Log in</a>
-        <a href="/register?role=seller&next=/sell" className="mt-3 ml-3 inline-flex rounded-lg bg-brand-red px-6 py-3 font-semibold text-white">Create seller account</a>
-      </main>
-    );
-  }
-
-  if (!user.emailVerified) {
+  if (user && !user.emailVerified) {
     return (
       <main className="container-site py-20 text-center">
         <h1 className="font-heading text-[clamp(1.75rem,6vw,50px)] text-black">Verify your email</h1>
@@ -221,7 +310,7 @@ export default function SellPage() {
     );
   }
 
-  if (user.role === "buyer") {
+  if (user && user.role === "buyer") {
     return (
       <main className="container-site py-20 text-center">
         <h1 className="font-heading text-[clamp(1.75rem,6vw,50px)] text-black">
@@ -246,6 +335,30 @@ export default function SellPage() {
           <h1 data-sell-heading className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.5rem,5vw,42px)]">
             Tell Us About Your Vehicle
           </h1>
+          {!user && offerReady && !offerLead ? (
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+              <TextInput
+                placeholder="Full name"
+                value={guestContact.fullName}
+                onChange={(value) => setGuestContact((prev) => ({ ...prev, fullName: value }))}
+              />
+              <TextInput
+                placeholder="Email"
+                type="email"
+                value={guestContact.email}
+                onChange={(value) => setGuestContact((prev) => ({ ...prev, email: value }))}
+              />
+              <FieldShell>
+                <PhoneInput
+                  international
+                  defaultCountry="US"
+                  value={guestContact.phone}
+                  onChange={(value) => setGuestContact((prev) => ({ ...prev, phone: value || "" }))}
+                  className="phone-input"
+                />
+              </FieldShell>
+            </div>
+          ) : null}
           <div data-sell-fields className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             <TextInput placeholder="Truck Name" value={form.title} onChange={(v) => setField("title", v)} />
             <TextInput placeholder="Year" value={form.year} onChange={(v) => setField("year", v)} />

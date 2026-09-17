@@ -72,6 +72,10 @@ export type Listing = {
   images: ListingImage[];
   views: number;
   seller?: { id?: string; _id?: string; fullName: string; role?: string };
+  guestId?: string;
+  guestEmail?: string;
+  guestName?: string;
+  guestPhone?: string;
   createdAt: string;
   updatedAt: string;
 };

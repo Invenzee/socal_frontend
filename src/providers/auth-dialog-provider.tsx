@@ -7,6 +7,7 @@ type PendingAction =
   | { type: "chat"; listingId: string }
   | { type: "favorite"; listingId: string }
   | { type: "sell" }
+  | { type: "claim-listing"; fullName?: string; email?: string; phone?: string }
   | null;
 
 type AuthDialogContextValue = {

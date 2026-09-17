@@ -201,14 +201,16 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
               <RiPhoneFill className="size-5" />
               {phone || "View Number"}
             </button>
-            <button
-              type="button"
-              onClick={() => void startChat()}
-              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-brand px-5 py-3.5 text-sm font-semibold text-white transition-[filter,transform] duration-200 hover:brightness-110 sm:text-base"
-            >
-              <RiMailSendFill className="size-5" />
-              Chat with seller
-            </button>
+            {listing.seller?.fullName || listing.seller?.id || listing.seller?._id ? (
+              <button
+                type="button"
+                onClick={() => void startChat()}
+                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-brand px-5 py-3.5 text-sm font-semibold text-white transition-[filter,transform] duration-200 hover:brightness-110 sm:text-base"
+              >
+                <RiMailSendFill className="size-5" />
+                Chat with seller
+              </button>
+            ) : null}
             <div className="mt-2 rounded-xl bg-white p-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] sm:p-6">
               <dl className="space-y-2.5 text-sm text-black/75 sm:text-[15px]">
                 {specs.map((spec) => (

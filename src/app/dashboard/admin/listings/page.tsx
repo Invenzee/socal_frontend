@@ -164,8 +164,8 @@ export default function AdminListingsPage() {
       hideBelow: "md",
       cell: (row) => (
         <div className="flex items-center gap-2">
-          <RowThumb name={row.seller?.fullName || "Seller"} shape="circle" size={28} />
-          <span className="truncate text-sm">{row.seller?.fullName || "Unknown"}</span>
+          <RowThumb name={row.seller?.fullName || row.guestName || "Guest"} shape="circle" size={28} />
+          <span className="truncate text-sm">{row.seller?.fullName || row.guestEmail || "Guest"}</span>
         </div>
       ),
     },
@@ -312,7 +312,7 @@ export default function AdminListingsPage() {
                 <DialogHeader className="text-left">
                   <DialogTitle className="font-heading text-xl">{review.title}</DialogTitle>
                   <DialogDescription>
-                    Submitted by {review.seller?.fullName || "Unknown seller"} on{" "}
+                    Submitted by {review.seller?.fullName || review.guestName || review.guestEmail || "Guest"} on{" "}
                     {new Date(review.createdAt).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",

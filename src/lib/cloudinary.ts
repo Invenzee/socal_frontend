@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { getGuestId } from "@/lib/guest";
 
 type Signature = {
   timestamp: number;
@@ -9,7 +10,11 @@ type Signature = {
 };
 
 export async function uploadListingImage(file: File, onProgress?: (pct: number) => void) {
-  const sig = await api<Signature>("/uploads/signature", { method: "POST" });
+  const guestId = typeof window === "undefined" ? "" : getGuestId();
+  const sig = await api<Signature>("/uploads/signature", {
+    method: "POST",
+    body: JSON.stringify(guestId ? { guestId } : {}),
+  });
   const form = new FormData();
   form.append("file", file);
   form.append("api_key", sig.apiKey);

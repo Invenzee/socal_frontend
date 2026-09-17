@@ -9,12 +9,6 @@ export default function OfferNextSteps() {
       >
         List your vehicle
       </Link>
-      <Link
-        href="/listings"
-        className="inline-flex w-full items-center justify-center rounded-[8px] bg-brand-red px-8 py-3 text-sm font-semibold text-white sm:w-auto sm:text-base"
-      >
-        Browse trucks
-      </Link>
     </div>
   );
 }

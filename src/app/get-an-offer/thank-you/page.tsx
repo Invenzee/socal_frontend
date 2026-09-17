@@ -35,8 +35,8 @@ export default function OfferThankYouPage() {
           Thank you
         </h1>
         <p data-thank-you className="mx-auto mt-4 max-w-xl text-sm text-black/60 sm:text-base">
-          We have your truck details and will follow up with an offer. You can list the same vehicle on the site or browse
-          trucks for sale while you wait.
+          We have your truck details and will follow up with an offer. You can list the same vehicle on the site while
+          you wait.
         </p>
         <div data-thank-you>
           <OfferNextSteps />

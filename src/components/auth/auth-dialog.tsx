@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { api, ApiRequestError } from "@/lib/api";
+import { getGuestId } from "@/lib/guest";
 import { useAuth } from "@/providers/auth-provider";
 import { useAuthDialog } from "@/providers/auth-dialog-provider";
 import type { AuthUser } from "@/types/api";
@@ -21,7 +22,7 @@ type Step = "form" | "verify";
 
 export default function AuthDialog() {
   const router = useRouter();
-  const { open, close, consumePending } = useAuthDialog();
+  const { open, close, consumePending, pending } = useAuthDialog();
   const { setUser, refresh } = useAuth();
   const [tab, setTab] = useState("signup");
   const [step, setStep] = useState<Step>("form");
@@ -37,12 +38,21 @@ export default function AuthDialog() {
   const [code, setCode] = useState("");
 
   useEffect(() => {
-    if (open) {
-      setStep("form");
-      setError("");
-      setCode("");
+    if (!open) return;
+    setStep("form");
+    setError("");
+    setCode("");
+    if (pending?.type === "claim-listing") {
+      setTab("signup");
+      setSignup((current) => ({
+        ...current,
+        fullName: pending.fullName || current.fullName,
+        email: pending.email || current.email,
+        phone: pending.phone || current.phone,
+      }));
+      setLogin((current) => ({ ...current, email: pending.email || current.email }));
     }
-  }, [open]);
+  }, [open, pending]);
 
   async function afterAuth(user: AuthUser, needsVerification: boolean) {
     setUser(user);
@@ -63,6 +73,7 @@ export default function AuthDialog() {
     if (!pending) return;
     window.setTimeout(() => {
       if (pending.type === "sell") router.push("/sell");
+      if (pending.type === "claim-listing") router.push("/dashboard/listings");
       window.dispatchEvent(new CustomEvent("socal:auth-resume", { detail: pending }));
     }, 50);
   }
@@ -76,12 +87,23 @@ export default function AuthDialog() {
     }
     setLoading(true);
     try {
+      const claiming = pending?.type === "claim-listing";
       const data = await api<{ user: AuthUser; needsVerification: boolean }>("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ ...signup, role: "buyer" }),
+        body: JSON.stringify({
+          ...signup,
+          role: claiming ? "seller" : "buyer",
+          guestId: claiming ? getGuestId() : undefined,
+        }),
       });
       await afterAuth(data.user, data.needsVerification);
     } catch (err) {
+      if (err instanceof ApiRequestError && err.status === 409) {
+        setTab("login");
+        setLogin((current) => ({ ...current, email: signup.email }));
+        setError("An account with this email or phone already exists. Log in to attach your listing.");
+        return;
+      }
       setError(err instanceof ApiRequestError ? err.message : "Could not create account.");
     } finally {
       setLoading(false);
@@ -95,7 +117,10 @@ export default function AuthDialog() {
     try {
       const data = await api<{ user: AuthUser; needsVerification: boolean }>("/auth/login", {
         method: "POST",
-        body: JSON.stringify(login),
+        body: JSON.stringify({
+          ...login,
+          guestId: pending?.type === "claim-listing" ? getGuestId() : undefined,
+        }),
       });
       await afterAuth(data.user, data.needsVerification);
     } catch (err) {
@@ -141,7 +166,11 @@ export default function AuthDialog() {
       <DialogContent className="max-w-[440px] border-black/10 bg-white sm:rounded-2xl">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl text-black">
-            {step === "verify" ? "Verify your email" : "Continue to contact the seller"}
+            {step === "verify"
+              ? "Verify your email"
+              : pending?.type === "claim-listing"
+                ? "Sign up to see your listing tracking"
+                : "Continue to contact the seller"}
           </DialogTitle>
         </DialogHeader>
 
