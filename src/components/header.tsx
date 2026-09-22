@@ -23,7 +23,6 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const NAV_LINKS = [
   { href: "/about", label: "About Us" },
   { href: "/listings", label: "Browse Trucks" },
-  { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },
 ] as const;
 

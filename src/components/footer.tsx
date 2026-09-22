@@ -27,7 +27,7 @@ const SITEMAP = [
   { href: "/about", label: "About" },
   { href: "/listings", label: "View Truck Listings" },
   { href: "/sell", label: "Sell My Truck" },
-  { href: "/faqs", label: "FAQ" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 const CONTACT = [
