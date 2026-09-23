@@ -11,45 +11,45 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const TESTIMONIALS = [
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
-    name: "Jaden Henderson",
-    location: "Ash Dr. San Jose, South Dakota",
+      "I posted my Peterbilt on Monday and had three serious messages by Wednesday. Selling directly to buyers saved me a lot of hassle.",
+    name: "Marcus T.",
+    location: "Bakersfield, CA",
     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
-    name: "Annette Black",
-    location: "Parker Rd. Allentown, New Mexico",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
-    name: "Courtney Henry",
-    location: "Elgin St. Celina, Delaware",
+      "Finding a used Ford F-250 near me was easy. I could filter by price and mileage, then message the owner right away.",
+    name: "Daniel R.",
+    location: "Riverside, CA",
     avatar: "https://randomuser.me/api/portraits/men/75.jpg",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
-    name: "Jenny Wilson",
-    location: "Preston Rd. Inglewood, Maine",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+      "The offer form was quick, and the follow-up call came the same afternoon. No pressure, no confusing steps.",
+    name: "Lisa M.",
+    location: "Anaheim, CA",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
-    name: "Robert Fox",
-    location: "Thornridge Cir. Syracuse, Connecticut",
+      "We needed two box trucks for our delivery business. Being able to compare listings in one place saved us days.",
+    name: "Carlos V.",
+    location: "Las Vegas, NV",
     avatar: "https://randomuser.me/api/portraits/men/22.jpg",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
-    name: "Esther Howard",
-    location: "Washington Ave. Manchester, Kentucky",
-    avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+      "Clear listings, honest sellers, and a simple process. I'd use it again for my next truck.",
+    name: "Tyler B.",
+    location: "Phoenix, AZ",
+    avatar: "https://randomuser.me/api/portraits/men/52.jpg",
+  },
+  {
+    quote:
+      "I'd been trying to sell my old Kenworth for weeks elsewhere. Here I had a buyer in under a week.",
+    name: "Robert H.",
+    location: "San Diego, CA",
+    avatar: "https://randomuser.me/api/portraits/men/68.jpg",
   },
 ] as const;
 
@@ -177,13 +177,11 @@ export default function Testimonials() {
           className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start lg:gap-16"
         >
           <h2 className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-white text-[clamp(1.75rem,6vw,50px)]">
-            What People Say After Used Our Service
+            What Buyers and Sellers Say
           </h2>
           <p className="max-w-xl text-sm leading-relaxed text-white/95 sm:text-base lg:pt-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip
+            Real people, real trucks, and deals that got done. Here&apos;s what
+            our community has to say about buying and selling on SoCalTruckTrade.
           </p>
         </div>
       </div>
@@ -198,36 +196,36 @@ export default function Testimonials() {
             ref={trackRef}
             className="flex w-full gap-4 will-change-transform sm:gap-6"
           >
-          {TESTIMONIALS.map((item) => (
-            <article
-              key={item.name}
-              data-testimonial-card
-              className="flex w-full shrink-0 flex-col justify-between rounded-[20px] bg-white p-6 sm:rounded-[24px] sm:p-8"
-            >
-              <p className="text-sm leading-relaxed text-black/85 sm:text-[15px]">
-                {item.quote}
-              </p>
-              <div className="mt-8 flex items-center gap-3 sm:mt-10">
-                <div className="relative size-11 shrink-0 overflow-hidden rounded-full bg-neutral-200 sm:size-12">
-                  <Image
-                    src={item.avatar}
-                    alt={item.name}
-                    fill
-                    sizes="48px"
-                    className="object-cover"
-                  />
+            {TESTIMONIALS.map((item) => (
+              <article
+                key={item.name}
+                data-testimonial-card
+                className="flex w-full shrink-0 flex-col justify-between rounded-[20px] bg-white p-6 sm:rounded-[24px] sm:p-8"
+              >
+                <p className="text-sm leading-relaxed text-black/85 sm:text-[15px]">
+                  {item.quote}
+                </p>
+                <div className="mt-8 flex items-center gap-3 sm:mt-10">
+                  <div className="relative size-11 shrink-0 overflow-hidden rounded-full bg-neutral-200 sm:size-12">
+                    <Image
+                      src={item.avatar}
+                      alt={item.name}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 text-left">
+                    <p className="truncate text-sm font-semibold text-black sm:text-base">
+                      {item.name}
+                    </p>
+                    <p className="truncate text-xs text-black/55 sm:text-sm">
+                      {item.location}
+                    </p>
+                  </div>
                 </div>
-                <div className="min-w-0 text-left">
-                  <p className="truncate text-sm font-semibold text-black sm:text-base">
-                    {item.name}
-                  </p>
-                  <p className="truncate text-xs text-black/55 sm:text-sm">
-                    {item.location}
-                  </p>
-                </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
           </div>
         </div>
       </div>

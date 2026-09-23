@@ -119,8 +119,10 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-5 text-sm leading-relaxed text-white/70">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              SoCalTruckTrade is a truck-only marketplace based in Anaheim,
+              California. Buy or sell semis, box trucks and pickups, and connect
+              directly with buyers and sellers across California and nearby
+              states.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIALS.map(({ href, label, icon: Icon, className }) => (

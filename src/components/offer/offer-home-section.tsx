@@ -79,17 +79,17 @@ export default function OfferHomeSection() {
   return (
     <section ref={sectionRef} className="bg-brand/8 py-16 sm:py-20 lg:py-24">
       <div className="container-site">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-xl text-center">
           <h2
             data-offer-reveal
             className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]"
           >
-            Get an Offer
+            Get an Offer on Your Truck
           </h2>
           <p data-offer-reveal className="mt-4 text-sm text-black/60 sm:text-base">
             {submitted
               ? "We already have your request. We will be in touch with a price."
-              : "Tell us a few details about your truck. No account needed."}
+              : "Tell us a few details about your truck. It takes about two minutes, and no account is needed."}
           </p>
         </div>
         <div data-offer-reveal className="mx-auto mt-8 max-w-4xl rounded-2xl bg-brand p-5 shadow-[0_16px_0_0_var(--color-brand-red)] sm:mt-10 sm:p-8">

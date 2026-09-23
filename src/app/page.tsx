@@ -88,18 +88,6 @@ const HOW_IT_WORKS = {
   },
 } as const;
 
-const BRANDS = [
-  { name: "Ford", src: "/ford-icon.webp" },
-  { name: "BMW", src: "/bmw-icon.webp" },
-  { name: "Chevrolet", src: "/chevrolet-icon.webp" },
-  { name: "Audi", src: "/audi-icon.webp" },
-  { name: "Mercedes-Benz", src: "/mercedes-icon.webp" },
-  { name: "Toyota", src: "/toyota-icon.webp" },
-  { name: "Nissan", src: "/nissan-icon.webp" },
-  { name: "Ram", src: "/ram-icon.webp" },
-  { name: "GMC", src: "/Group.webp" },
-] as const;
-
 export default function Home() {
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -121,11 +109,6 @@ export default function Home() {
   const needUnderlineRef = useRef<SVGPathElement>(null);
   const needCtaRef = useRef<HTMLAnchorElement>(null);
   const shopBrandRef = useRef<HTMLElement>(null);
-  const brandsRef = useRef<HTMLElement>(null);
-  const brandsHeadingRef = useRef<HTMLHeadingElement>(null);
-  const brandsSubRef = useRef<HTMLParagraphElement>(null);
-  const brandsViewportRef = useRef<HTMLDivElement>(null);
-  const brandsTrackRef = useRef<HTMLDivElement>(null);
   const howItWorksRef = useRef<HTMLElement>(null);
   const areasServedRef = useRef<HTMLElement>(null);
 
@@ -411,93 +394,6 @@ export default function Home() {
       return () => cleanups.forEach((fn) => fn());
     },
     { scope: shopBrandRef }
-  );
-
-  useGSAP(
-    () => {
-      const section = brandsRef.current;
-      const heading = brandsHeadingRef.current;
-      const sub = brandsSubRef.current;
-      const viewport = brandsViewportRef.current;
-      const track = brandsTrackRef.current;
-      if (!section || !heading || !sub || !viewport || !track) return;
-
-      const reduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      const items = track.querySelectorAll<HTMLElement>("[data-brand-item]");
-
-      const sizeItems = () => {
-        const visible = window.matchMedia("(min-width: 1024px)").matches
-          ? 6
-          : window.matchMedia("(min-width: 640px)").matches
-            ? 4
-            : 2;
-        const slot = viewport.clientWidth / visible;
-        items.forEach((item) => {
-          item.style.width = `${slot}px`;
-        });
-        return slot;
-      };
-
-      sizeItems();
-
-      if (reduced) {
-        gsap.set([heading, sub, viewport], { autoAlpha: 1, y: 0 });
-        return;
-      }
-
-      gsap.set(heading, { autoAlpha: 0, y: 28 });
-      gsap.set(sub, { autoAlpha: 0, y: 16 });
-      gsap.set(viewport, { autoAlpha: 0, y: 20 });
-
-      const intro = gsap.timeline({
-        defaults: { ease: "power3.out" },
-        scrollTrigger: {
-          trigger: section,
-          start: "top 78%",
-          once: true,
-        },
-      });
-
-      intro.to(heading, { autoAlpha: 1, y: 0, duration: 0.7 });
-      intro.to(sub, { autoAlpha: 1, y: 0, duration: 0.55 }, 0.15);
-      intro.to(viewport, { autoAlpha: 1, y: 0, duration: 0.65 }, 0.28);
-
-      let loop: gsap.core.Tween | undefined;
-
-      const startLoop = () => {
-        loop?.kill();
-        gsap.set(track, { x: 0 });
-        sizeItems();
-        const half = track.scrollWidth / 2;
-        if (half <= 0) return;
-        loop = gsap.to(track, {
-          x: -half,
-          duration: Math.max(half / 40, 18),
-          ease: "none",
-          repeat: -1,
-        });
-      };
-
-      startLoop();
-
-      const onResize = () => startLoop();
-      window.addEventListener("resize", onResize);
-
-      const pause = () => loop?.pause();
-      const play = () => loop?.resume();
-      viewport.addEventListener("mouseenter", pause);
-      viewport.addEventListener("mouseleave", play);
-
-      return () => {
-        window.removeEventListener("resize", onResize);
-        viewport.removeEventListener("mouseenter", pause);
-        viewport.removeEventListener("mouseleave", play);
-        loop?.kill();
-      };
-    },
-    { scope: brandsRef }
   );
 
   useGSAP(
@@ -839,59 +735,6 @@ export default function Home() {
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      <section
-        ref={brandsRef}
-        className="overflow-hidden bg-neutral-100 py-16 sm:py-20 lg:py-24"
-      >
-        <div className="container-site text-center">
-          <h2
-            ref={brandsHeadingRef}
-            className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]"
-          >
-            <span className="block">Our Most</span>
-            <span className="block">
-              Popular <span className="text-brand">Brands</span>
-            </span>
-          </h2>
-          <p
-            ref={brandsSubRef}
-            className="mt-3 text-sm text-black sm:mt-4 sm:text-base"
-          >
-            Browse inventory by Brand Name
-          </p>
-        </div>
-
-        <div
-          ref={brandsViewportRef}
-          className="w-full mt-10 overflow-hidden sm:mt-12 lg:mt-14"
-        >
-          <div
-            ref={brandsTrackRef}
-            className="flex w-max will-change-transform"
-            aria-label="Popular truck brands"
-          >
-            {[...BRANDS, ...BRANDS].map((brand, index) => (
-              <div
-                key={`${brand.name}-${index}`}
-                data-brand-item
-                className="flex shrink-0 items-center justify-center px-3 sm:px-4"
-              >
-                <div className="group flex h-14 w-full max-w-[150px] items-center justify-center sm:h-16">
-                  <Image
-                    src={brand.src}
-                    alt={brand.name}
-                    width={150}
-                    height={64}
-                    className="h-10 max-w-full object-contain grayscale transition-[filter,transform] duration-300 ease-out group-hover:scale-105 group-hover:grayscale-0 sm:h-12"
-                    style={{ width: "auto" }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
