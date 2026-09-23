@@ -745,7 +745,7 @@ export default function Home() {
             data-how-heading
             className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]"
           >
-            How SoCalTruckTrade Works
+            How It Works
           </h2>
         </div>
 
