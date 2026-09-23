@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { RiCheckLine } from "react-icons/ri";
 import GetStartedActions from "@/components/get-started-actions";
 import Testimonials from "@/components/testimonials";
+import HomeFaq from "@/components/home-faq";
 import ReadyToListings from "@/components/ready-to-listings";
 import OfferHomeSection from "@/components/offer/offer-home-section";
 import { useAuth } from "@/providers/auth-provider";
@@ -18,13 +19,74 @@ import { useOfferDialog } from "@/providers/offer-dialog-provider";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const SELL_POINTS = [
-  "Quick Appraisal & Instant Offers",
-  "Same-Day Payment Options",
-  "We Handle Paperwork & Pick-Up",
+  "Quick appraisal and fast offers",
+  "Same-day payment options",
+  "Help with paperwork and pick-up",
 ] as const;
 
 const SELL_PHONE = "+1 310-862-9113";
 const SELL_PHONE_HREF = "tel:+13108629113";
+
+const SHOP_BY_BRAND_CATEGORIES = [
+  {
+    title: "Heavy-Duty & Semi Trucks",
+    description:
+      "Freightliner, Peterbilt, Kenworth, Volvo, Mack, International and Western Star trucks for long-haul, regional and vocational work.",
+    imageSrc: "/shop-brand-heavy-duty.webp",
+    imageAlt: "Red Freightliner semi truck on a highway",
+  },
+  {
+    title: "Medium-Duty & Commercial Trucks",
+    description:
+      "Hino and Isuzu trucks for local delivery, box truck routes and light commercial jobs.",
+    imageSrc: "/shop-brand-medium-duty.webp",
+    imageAlt: "Orange semi truck hauling a commercial load",
+  },
+  {
+    title: "Pickup Trucks",
+    description:
+      "Ford, Ram, Chevrolet, GMC, Toyota and Nissan pickups for work sites, towing and everyday driving.",
+    imageSrc: "/shop-brand-pickup.webp",
+    imageAlt: "Line of white semi trucks parked along a road",
+  },
+] as const;
+
+const HOW_IT_WORKS = {
+  sellers: {
+    title: "For Sellers",
+    steps: [
+      {
+        lead: "Create your account.",
+        rest: "Sign up for free in a minute.",
+      },
+      {
+        lead: "Post your listing.",
+        rest: "Add photos, price, mileage and details.",
+      },
+      {
+        lead: "Chat with buyers.",
+        rest: "Message interested buyers directly and close the deal your way.",
+      },
+    ],
+  },
+  buyers: {
+    title: "For Buyers",
+    steps: [
+      {
+        lead: "Search listings.",
+        rest: "Filter by brand, year, price and location.",
+      },
+      {
+        lead: "Message the seller.",
+        rest: "Ask questions and request more photos.",
+      },
+      {
+        lead: "Inspect and buy.",
+        rest: "Meet the seller and drive away with confidence.",
+      },
+    ],
+  },
+} as const;
 
 const BRANDS = [
   { name: "Ford", src: "/ford-icon.webp" },
@@ -47,8 +109,8 @@ export default function Home() {
   const imageRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const pillRef = useRef<HTMLParagraphElement>(null);
+  const bodyRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLButtonElement>(null);
-  const sellRef = useRef<HTMLSpanElement>(null);
   const moveRef = useRef<HTMLElement>(null);
   const moveHeadingRef = useRef<HTMLHeadingElement>(null);
   const moveCardRef = useRef<HTMLDivElement>(null);
@@ -58,11 +120,14 @@ export default function Home() {
   const needContentRef = useRef<HTMLDivElement>(null);
   const needUnderlineRef = useRef<SVGPathElement>(null);
   const needCtaRef = useRef<HTMLAnchorElement>(null);
+  const shopBrandRef = useRef<HTMLElement>(null);
   const brandsRef = useRef<HTMLElement>(null);
   const brandsHeadingRef = useRef<HTMLHeadingElement>(null);
   const brandsSubRef = useRef<HTMLParagraphElement>(null);
   const brandsViewportRef = useRef<HTMLDivElement>(null);
   const brandsTrackRef = useRef<HTMLDivElement>(null);
+  const howItWorksRef = useRef<HTMLElement>(null);
+  const areasServedRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
@@ -71,16 +136,16 @@ export default function Home() {
       const image = imageRef.current;
       const heading = headingRef.current;
       const pill = pillRef.current;
+      const body = bodyRef.current;
       const cta = ctaRef.current;
-      const sell = sellRef.current;
-      if (!hero || !bg || !image || !heading || !pill || !cta) return;
+      if (!hero || !bg || !image || !heading || !pill || !body || !cta) return;
 
       const reduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
 
       if (reduced) {
-        gsap.set([heading, pill, cta, image], {
+        gsap.set([heading, pill, body, cta, image], {
           autoAlpha: 1,
           y: 0,
           scale: 1,
@@ -91,6 +156,7 @@ export default function Home() {
 
       gsap.set(heading, { autoAlpha: 0, y: 40, scale: 0.96 });
       gsap.set(pill, { autoAlpha: 0, scaleX: 0.35 });
+      gsap.set(body, { autoAlpha: 0, y: 24 });
       gsap.set(cta, { autoAlpha: 0, y: 28 });
       gsap.set(image, { scale: 1.12 });
 
@@ -106,18 +172,8 @@ export default function Home() {
         { autoAlpha: 1, scaleX: 1, duration: 0.7, ease: "power3.out" },
         0.4
       );
-      intro.to(cta, { autoAlpha: 1, y: 0, duration: 0.65 }, 0.55);
-
-      if (sell) {
-        gsap.to(sell, {
-          textShadow: "0 0 22px rgba(255,50,50,0.55)",
-          duration: 1.5,
-          yoyo: true,
-          repeat: -1,
-          ease: "sine.inOut",
-          delay: 1.2,
-        });
-      }
+      intro.to(body, { autoAlpha: 1, y: 0, duration: 0.65 }, 0.52);
+      intro.to(cta, { autoAlpha: 1, y: 0, duration: 0.65 }, 0.68);
 
       gsap.to(bg, {
         yPercent: 16,
@@ -296,6 +352,69 @@ export default function Home() {
 
   useGSAP(
     () => {
+      const section = shopBrandRef.current;
+      if (!section) return;
+
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const bits = section.querySelectorAll<HTMLElement>("[data-shop-brand-item]");
+
+      if (reduced) {
+        gsap.set(bits, { autoAlpha: 1, y: 0 });
+        return;
+      }
+
+      gsap.set(bits, { autoAlpha: 0, y: 28 });
+
+      gsap.to(bits, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.65,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 78%",
+          once: true,
+        },
+      });
+
+      const cleanups: Array<() => void> = [];
+      section
+        .querySelectorAll<HTMLElement>("[data-shop-brand-card]")
+        .forEach((card) => {
+          const enter = () =>
+            gsap.to(card, {
+              y: -6,
+              scale: 1.01,
+              duration: 0.22,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          const leave = () =>
+            gsap.to(card, {
+              y: 0,
+              scale: 1,
+              duration: 0.22,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          card.addEventListener("mouseenter", enter);
+          card.addEventListener("mouseleave", leave);
+          cleanups.push(() => {
+            card.removeEventListener("mouseenter", enter);
+            card.removeEventListener("mouseleave", leave);
+          });
+        });
+
+      return () => cleanups.forEach((fn) => fn());
+    },
+    { scope: shopBrandRef }
+  );
+
+  useGSAP(
+    () => {
       const section = brandsRef.current;
       const heading = brandsHeadingRef.current;
       const sub = brandsSubRef.current;
@@ -381,6 +500,85 @@ export default function Home() {
     { scope: brandsRef }
   );
 
+  useGSAP(
+    () => {
+      const section = howItWorksRef.current;
+      if (!section) return;
+
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const bits = section.querySelectorAll<HTMLElement>("[data-how-item]");
+
+      if (reduced) {
+        gsap.set(bits, { autoAlpha: 1, y: 0, x: 0 });
+        return;
+      }
+
+      const heading = section.querySelector("[data-how-heading]");
+      const sellers = section.querySelector("[data-how-sellers]");
+      const buyers = section.querySelector("[data-how-buyers]");
+
+      gsap.set(heading, { autoAlpha: 0, y: 28 });
+      gsap.set(sellers, { autoAlpha: 0, x: -36 });
+      gsap.set(buyers, { autoAlpha: 0, x: 36 });
+
+      const intro = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        scrollTrigger: {
+          trigger: section,
+          start: "top 78%",
+          once: true,
+        },
+      });
+
+      intro.to(heading, { autoAlpha: 1, y: 0, duration: 0.7 });
+      intro.to(sellers, { autoAlpha: 1, x: 0, duration: 0.75 }, 0.18);
+      intro.to(buyers, { autoAlpha: 1, x: 0, duration: 0.75 }, 0.18);
+    },
+    { scope: howItWorksRef }
+  );
+
+  useGSAP(
+    () => {
+      const section = areasServedRef.current;
+      if (!section) return;
+
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const bits = section.querySelectorAll<HTMLElement>("[data-areas-item]");
+
+      if (reduced) {
+        gsap.set(bits, { autoAlpha: 1, y: 0, x: 0 });
+        return;
+      }
+
+      const copy = section.querySelector("[data-areas-copy]");
+      const map = section.querySelector("[data-areas-map]");
+
+      gsap.set(copy, { autoAlpha: 0, y: 28 });
+      gsap.set(map, { autoAlpha: 0, y: 32, scale: 0.98 });
+
+      const intro = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        scrollTrigger: {
+          trigger: section,
+          start: "top 78%",
+          once: true,
+        },
+      });
+
+      intro.to(copy, { autoAlpha: 1, y: 0, duration: 0.7 });
+      intro.to(
+        map,
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.8 },
+        0.15
+      );
+    },
+    { scope: areasServedRef }
+  );
+
   return (
     <main>
       <section
@@ -405,25 +603,29 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/45" />
         </div>
 
-        <div className="relative z-10 container-site flex flex-col items-center px-0 py-16 text-center sm:py-20">
+        <div className="relative z-10 w-full min-w-0 py-16 sm:py-20">
+        <div className="container-site flex min-w-0 flex-col items-center px-0 text-center">
+          <p
+            ref={pillRef}
+            className="mb-5 inline-flex max-w-full origin-center items-center justify-center rounded-full bg-brand-red px-5 py-2.5 text-center text-[clamp(0.48rem,1.4vw,0.9rem)] font-bold uppercase tracking-[0.14em] text-white text-balance sm:px-10 sm:py-3"
+          >
+            Get a fast, fair offer today.
+          </p>
           <h1
             ref={headingRef}
-            className="font-heading uppercase leading-[1.08] tracking-[0.06em] text-white text-[clamp(1.65rem,6.4vw,4.5rem)]"
+            className="w-full min-w-0 font-heading uppercase leading-[1.08] tracking-[0.04em] text-white text-[clamp(1.45rem,4.8vw,3.35rem)]"
           >
-            <span className="block whitespace-nowrap">
-              Ready to{" "}
-              <span ref={sellRef} className="text-brand-red">
-                Sell
-              </span>
-            </span>
-            <span className="block whitespace-nowrap">Your Truck?</span>
+            Buy &amp; Sell Trucks Across Southern California
           </h1>
 
           <p
-            ref={pillRef}
-            className="mt-5 inline-flex origin-center items-center justify-center rounded-full bg-brand-red px-5 py-2.5 text-center text-[clamp(0.68rem,1.9vw,1.05rem)] font-bold uppercase tracking-[0.18em] text-white whitespace-nowrap sm:mt-6 sm:px-12 sm:py-3"
+            ref={bodyRef}
+            className="mt-5 w-full min-w-0 max-w-[40rem] text-sm font-normal leading-relaxed text-white sm:mt-6 sm:text-base"
           >
-            Get a Fast, Fair Offer Today.
+            SoCalTruckTrade is Southern California&apos;s truck-only marketplace.
+            Browse listings from local sellers, chat with them directly, or list
+            your own truck in minutes. From semis to pickups, we make buying and
+            selling simple.
           </p>
 
           <button
@@ -439,8 +641,9 @@ export default function Home() {
             }}
             className="mt-6 inline-flex cursor-pointer items-center justify-center rounded-[8px] bg-brand px-8 py-3 text-base font-semibold text-white transition-all duration-150 hover:scale-[1.04] hover:brightness-110 sm:mt-7 sm:px-10 sm:py-3.5 sm:text-lg"
           >
-            {user?.role === "seller" || user?.role === "admin" ? "Sell Your Truck" : "Get an Offer"}
+            Get an Offer
           </button>
+        </div>
         </div>
       </section>
 
@@ -469,9 +672,18 @@ export default function Home() {
                   strokeWidth="4"
                 />
               </svg>
-            </span>
-            <span className="block">Matters</span>
+            </span>{" "}
+            Matters
+            <span className="block">Trucks for Every Job</span>
           </h2>
+
+          <p className="mx-auto mt-5 max-w-[42rem] text-sm font-normal leading-relaxed text-black sm:mt-6 sm:text-base">
+            Whether you&apos;re hauling freight, running a fleet, or upgrading
+            your work pickup, the right truck keeps your business moving.
+            SoCalTruckTrade brings together new and used trucks from private
+            sellers and businesses, so you can compare options and deal directly
+            with the owner, with no middleman and no runaround.
+          </p>
 
           <div
             ref={moveCardRef}
@@ -515,7 +727,6 @@ export default function Home() {
         >
           <div className="max-w-xl text-left">
             <h2 className="font-heading uppercase leading-[1.25] tracking-[0.04em] text-white text-[clamp(1.75rem,6vw,50px)]">
-              Need to{" "}
               <span className="relative pb-[0.18em]">
                 Sell
                 <svg
@@ -531,13 +742,16 @@ export default function Home() {
                     strokeWidth="4"
                   />
                 </svg>
-              </span>{" "} <br className="max-sm:hidden" />
-              Your Truck?
+              </span>{" "}
+              Your Truck
+              <span className="block">Fast and Fair</span>
             </h2>
 
             <p className="mt-4 text-sm leading-relaxed text-white/90 sm:mt-5 sm:text-base">
-              Get a fast, fair cash offer on your truck. We buy all makes and
-              models and take care of the details so you don&apos;t have to.
+              Ready to sell? Tell us about your truck and get a fast, fair
+              offer, or create a free account and post your own listing to reach
+              buyers across California and neighboring states. We take care of
+              the details so you don&apos;t have to.
             </p>
 
             <ul className="mt-6 flex flex-col gap-3 sm:mt-7">
@@ -575,6 +789,58 @@ export default function Home() {
       </section>
 
       <OfferHomeSection />
+
+      <section
+        ref={shopBrandRef}
+        className="bg-white py-16 sm:py-20 lg:py-24"
+      >
+        <div className="container-site text-center">
+          <h2
+            data-shop-brand-item
+            className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]"
+          >
+            <span className="block">Shop Trucks</span>
+            <span className="block">
+              by <span className="text-brand">Brand</span>
+            </span>
+          </h2>
+          <p
+            data-shop-brand-item
+            className="mt-3 text-sm text-black sm:mt-4 sm:text-base"
+          >
+            Browse inventory by brand name.
+          </p>
+
+          <ul className="mt-10 grid list-none grid-cols-1 gap-8 p-0 text-left sm:mt-12 lg:mt-14 lg:grid-cols-3 lg:gap-6">
+            {SHOP_BY_BRAND_CATEGORIES.map((category) => (
+              <li key={category.title} data-shop-brand-item>
+                <article
+                  data-shop-brand-card
+                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-black/8 bg-neutral-100 shadow-[0_12px_0_0_var(--color-brand)]"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden bg-neutral-200">
+                    <Image
+                      src={category.imageSrc}
+                      alt={category.imageAlt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1140px) 33vw, 360px"
+                      className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col px-5 py-6 sm:px-6 sm:py-7">
+                    <h3 className="font-heading text-[clamp(1.15rem,2.8vw,1.35rem)] leading-snug tracking-[0.02em] text-black">
+                      {category.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-black/75 sm:text-[0.9375rem]">
+                      {category.description}
+                    </p>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       <section
         ref={brandsRef}
@@ -629,8 +895,132 @@ export default function Home() {
         </div>
       </section>
 
+      <section ref={howItWorksRef} className="bg-white pt-16 sm:pt-20 lg:pt-24">
+        <div className="container-site text-center">
+          <h2
+            data-how-item
+            data-how-heading
+            className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]"
+          >
+            How SoCalTruckTrade Works
+          </h2>
+        </div>
+
+        <div className="mt-10 grid grid-cols-1 md:mt-12 md:grid-cols-2 lg:mt-14">
+          <div
+            data-how-item
+            data-how-sellers
+            className="bg-brand-red text-white"
+          >
+            <div className="container-site py-12 sm:py-14 md:mr-0 md:max-w-[calc(1140px/2+0.5rem)] md:pr-6 lg:py-16 lg:pr-10">
+              <h3 className="font-heading text-[clamp(1.35rem,4vw,2rem)] uppercase leading-none tracking-[0.04em]">
+                {HOW_IT_WORKS.sellers.title}
+              </h3>
+              <ol className="mt-8 flex list-none flex-col gap-6 p-0 sm:mt-9 sm:gap-7">
+                {HOW_IT_WORKS.sellers.steps.map((step, index) => (
+                  <li key={step.lead} className="flex gap-4">
+                    <span
+                      className="flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-white/35 text-sm font-semibold sm:size-9"
+                      aria-hidden="true"
+                    >
+                      {index + 1}
+                    </span>
+                    <div className="min-w-0 pt-0.5">
+                      <h4 className="text-base font-semibold leading-snug sm:text-lg">
+                        {step.lead}
+                      </h4>
+                      <p className="mt-1.5 text-sm leading-relaxed text-white/90 sm:text-base">
+                        {step.rest}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+
+          <div
+            data-how-item
+            data-how-buyers
+            className="bg-brand text-white"
+          >
+            <div className="container-site py-12 sm:py-14 md:ml-0 md:max-w-[calc(1140px/2+0.5rem)] md:pl-6 lg:py-16 lg:pl-10">
+              <h3 className="font-heading text-[clamp(1.35rem,4vw,2rem)] uppercase leading-none tracking-[0.04em]">
+                {HOW_IT_WORKS.buyers.title}
+              </h3>
+              <ol className="mt-8 flex list-none flex-col gap-6 p-0 sm:mt-9 sm:gap-7">
+                {HOW_IT_WORKS.buyers.steps.map((step, index) => (
+                  <li key={step.lead} className="flex gap-4">
+                    <span
+                      className="flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-white/35 text-sm font-semibold sm:size-9"
+                      aria-hidden="true"
+                    >
+                      {index + 1}
+                    </span>
+                    <div className="min-w-0 pt-0.5">
+                      <h4 className="text-base font-semibold leading-snug sm:text-lg">
+                        {step.lead}
+                      </h4>
+                      <p className="mt-1.5 text-sm leading-relaxed text-white/90 sm:text-base">
+                        {step.rest}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        ref={areasServedRef}
+        className="bg-neutral-100 py-16 sm:py-20 lg:py-24"
+        aria-labelledby="areas-served-heading"
+      >
+        <div className="container-site grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div data-areas-item data-areas-copy>
+            <h2
+              id="areas-served-heading"
+              className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]"
+            >
+              <span className="block">Serving Southern</span>
+              <span className="block">
+                California and{" "}
+                <span className="text-brand">Nearby States</span>
+              </span>
+            </h2>
+            <p className="mt-5 text-sm leading-relaxed text-black/80 sm:mt-6 sm:text-base">
+              Based in Anaheim, we connect truck buyers and sellers throughout
+              Orange County, Los Angeles, the Inland Empire and San Diego, and
+              across all of California. We also serve customers in neighboring
+              Nevada, Arizona and Oregon, so you can find the right truck or the
+              right buyer within driving distance.
+            </p>
+          </div>
+
+          <div
+            data-areas-item
+            data-areas-map
+            className="overflow-hidden rounded-lg border border-black/8 bg-white shadow-[0_16px_0_0_var(--color-brand-red)]"
+          >
+            <iframe
+              title="Map of SoCalTruckTrade service area centered on Anaheim, California"
+              src="https://maps.google.com/maps?q=Anaheim%2C+CA&z=8&ie=UTF8&iwloc=&output=embed"
+              className="aspect-[4/3] w-full min-h-[240px] border-0 sm:min-h-[280px]"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
       <GetStartedActions />
+
+
       <Testimonials />
+      <HomeFaq />
       <ReadyToListings />
     </main>
   );
