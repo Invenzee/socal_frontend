@@ -24,30 +24,30 @@ const SELL_POINTS = [
   "Help with paperwork and pick-up",
 ] as const;
 
-const SELL_PHONE = "+1 310-862-9113";
-const SELL_PHONE_HREF = "tel:+13108629113";
+const SELL_PHONE = "+1 310-962-9113";
+const SELL_PHONE_HREF = "tel:+13109629113";
 
 const SHOP_BY_BRAND_CATEGORIES = [
   {
     title: "Heavy-Duty & Semi Trucks",
     description:
       "Freightliner, Peterbilt, Kenworth, Volvo, Mack, International and Western Star trucks for long-haul, regional and vocational work.",
-    imageSrc: "/shop-brand-heavy-duty.webp",
-    imageAlt: "Red Freightliner semi truck on a highway",
+    imageSrc: "/shop-brand-heavy-duty-2.webp",
+    imageAlt: "White Freightliner day-cab semi parked on a gravel lot",
   },
   {
     title: "Medium-Duty & Commercial Trucks",
     description:
       "Hino and Isuzu trucks for local delivery, box truck routes and light commercial jobs.",
-    imageSrc: "/shop-brand-medium-duty.webp",
-    imageAlt: "Orange semi truck hauling a commercial load",
+    imageSrc: "/shop-brand-medium-duty-2.webp",
+    imageAlt: "White cab-over medium-duty flatbed truck",
   },
   {
     title: "Pickup Trucks",
     description:
       "Ford, Ram, Chevrolet, GMC, Toyota and Nissan pickups for work sites, towing and everyday driving.",
-    imageSrc: "/shop-brand-pickup.webp",
-    imageAlt: "Line of white semi trucks parked along a road",
+    imageSrc: "/shop-brand-pickup-2.webp",
+    imageAlt: "Dark gray pickup truck driving on a highway",
   },
 ] as const;
 

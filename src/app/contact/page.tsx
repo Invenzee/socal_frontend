@@ -13,8 +13,8 @@ import { api, ApiRequestError } from "@/lib/api";
 gsap.registerPlugin(useGSAP);
 
 const DETAILS = [
-  { href: "tel:+13108629113", label: "+1 310-862-9113", icon: RiPhoneLine },
-  { href: "mailto:so.caltrucktrade@gmail.com", label: "so.caltrucktrade@gmail.com", icon: RiMailLine },
+  { href: "tel:+13109629113", label: "+1 310-962-9113", icon: RiPhoneLine },
+  { href: "mailto:info@socaltrucktrade.com", label: "info@socaltrucktrade.com", icon: RiMailLine },
 ] as const;
 
 export default function ContactPage() {

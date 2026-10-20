@@ -31,8 +31,8 @@ const SITEMAP = [
 ] as const;
 
 const CONTACT = [
-  { href: "tel:+13108629113", label: "+1 310-862-9113" },
-  { href: "mailto:so.caltrucktrade@gmail.com", label: "so.caltrucktrade@gmail.com" },
+  { href: "tel:+13109629113", label: "+1 310-962-9113" },
+  { href: "mailto:info@socaltrucktrade.com", label: "info@socaltrucktrade.com" },
   { href: "https://www.socaltrucktrade.com", label: "www.socaltrucktrade.com" },
 ] as const;
 
