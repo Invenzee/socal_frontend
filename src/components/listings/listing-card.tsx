@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatMileage, formatPrice } from "@/lib/api";
 import type { Listing } from "@/types/api";
+import { PICKUP_PHOTOS } from "@/components/listings/pickup-photos";
 
 export default function ListingCard({ listing }: { listing: Listing }) {
-  const image = listing.images.find((item) => item.isPrimary)?.url || listing.images[0]?.url || "/placeholder.svg";
+  const image = PICKUP_PHOTOS[0].url;
 
   return (
     <article className="flex flex-col rounded-lg border border-black/8 bg-white p-4 shadow-[0_2px_10px_rgba(0,0,0,0.04)] sm:p-5">

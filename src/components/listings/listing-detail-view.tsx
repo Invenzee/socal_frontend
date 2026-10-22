@@ -12,6 +12,7 @@ import { api, ApiRequestError, formatMileage, formatPrice } from "@/lib/api";
 import { useAuth } from "@/providers/auth-provider";
 import { useAuthDialog } from "@/providers/auth-dialog-provider";
 import type { Listing } from "@/types/api";
+import { PICKUP_PHOTOS } from "@/components/listings/pickup-photos";
 
 gsap.registerPlugin(useGSAP);
 
@@ -108,9 +109,7 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
     }
   }
 
-  const images = listing.images.length
-    ? listing.images
-    : [{ url: "/placeholder.svg", publicId: "placeholder", isPrimary: true }];
+  const images = PICKUP_PHOTOS;
   const main = images[0];
   const rest = images.slice(1, 3);
   const description = listing.description.split(/\n+/).filter(Boolean);
