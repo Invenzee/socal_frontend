@@ -97,9 +97,9 @@ export default function Header() {
 
   return (
     <header ref={headerRef} className="sticky top-0 z-50 w-full bg-white transition-[box-shadow] duration-300">
-      <div className="container-site grid h-[4.75rem] grid-cols-[auto_1fr_auto] items-center gap-3 sm:h-20 sm:gap-4">
+      <div className="container-site py-2 grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
         <Link href="/" className="shrink-0" onClick={closeMenu}>
-          <Image src="/logo.webp" alt="SoCal Truck Trade" width={87} height={89} priority className="h-14 w-auto sm:h-[3.85rem]" />
+          <Image src="/logo.webp" alt="SoCal Truck Trade" width={174} height={178} priority className="h-28 w-auto sm:h-[6rem]" />
         </Link>
 
         <nav aria-label="Primary" className="hidden min-w-0 items-center justify-center gap-5 lg:flex xl:gap-8">

@@ -149,25 +149,25 @@ export default function AboutTimeline() {
           aria-hidden
         />
 
-        <div className="pointer-events-none absolute left-[5%] top-1/3 z-0 hidden size-28 -translate-y-1/2 -rotate-45 overflow-hidden border-[6px] border-brand bg-neutral-200 lg:block xl:size-36">
-          <div className="relative flex size-full rotate-45 items-center justify-center overflow-hidden">
+        <div className="pointer-events-none absolute left-[4%] top-[30%] z-0 hidden size-36 -translate-y-1/2 -rotate-45 overflow-hidden border-[6px] border-brand bg-neutral-200 lg:block xl:size-44">
+          <div className="relative flex size-full items-center justify-center overflow-hidden">
             <Image
-              src="/time-line-1.webp"
+              src="/timeline-gmc-sierra.webp"
               alt=""
-              width={140}
-              height={140}
-              className="size-[120%] max-w-none object-cover"
+              width={176}
+              height={176}
+              className="size-[165%] max-w-none origin-center -rotate-[-45deg] object-cover"
             />
           </div>
         </div>
 
-        <div className="pointer-events-none absolute bottom-[12%] right-[8%] z-0 hidden h-28 w-44 overflow-hidden bg-neutral-200 lg:block xl:h-36 xl:w-56">
+        <div className="pointer-events-none absolute bottom-[10%] right-[6%] z-0 hidden h-36 w-56 overflow-hidden bg-neutral-200 lg:block xl:h-44 xl:w-72">
           <Image
-            src="/timeline-2.webp"
+            src="/timeline-toyota-tacoma.avif"
             alt=""
-            width={224}
-            height={144}
-            className="size-full object-cover"
+            width={288}
+            height={176}
+            className="size-full object-cover object-center"
           />
         </div>
 

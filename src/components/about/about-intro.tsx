@@ -110,11 +110,11 @@ export default function AboutIntro() {
           />
           <div className="relative z-10 aspect-[4/3] w-full overflow-hidden bg-neutral-200">
             <Image
-              src="/about-about-sec-image.webp"
-              alt="Pickup trucks on a mountain overlook"
+              src="/timeline-gmc-sierra.webp"
+              alt="White GMC Sierra EV pickup driving across a bridge"
               fill
               sizes="(max-width: 1024px) 100vw, 560px"
-              className="object-cover"
+              className="object-cover object-center"
             />
           </div>
         </div>

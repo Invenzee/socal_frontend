@@ -67,7 +67,7 @@ export default function AboutHero() {
         className="relative w-full h-full overflow-hidden bg-neutral-200"
       >
         <div className="relative w-full h-full">
-          <img src="/about-hero.webp" alt="Pickup trucks overlooking mountains" className="object-contain w-full h-full relative" /> 
+          <img src="/about-hero.webp" alt="Green, silver, and black Chevrolet pickups parked on a mountain overlook" className="object-contain w-full h-full relative" /> 
         </div>
       </div>
     </section>

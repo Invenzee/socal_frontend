@@ -32,22 +32,22 @@ const SHOP_BY_BRAND_CATEGORIES = [
     title: "Heavy-Duty & Semi Trucks",
     description:
       "Freightliner, Peterbilt, Kenworth, Volvo, Mack, International and Western Star trucks for long-haul, regional and vocational work.",
-    imageSrc: "/shop-brand-heavy-duty-2.webp",
-    imageAlt: "White Freightliner day-cab semi parked on a gravel lot",
+    imageSrc: "/shop-brand-heavy-duty-3.webp",
+    imageAlt: "White Ram 1500 Big Horn crew cab pickup",
   },
   {
     title: "Medium-Duty & Commercial Trucks",
     description:
       "Hino and Isuzu trucks for local delivery, box truck routes and light commercial jobs.",
-    imageSrc: "/shop-brand-medium-duty-2.webp",
-    imageAlt: "White cab-over medium-duty flatbed truck",
+    imageSrc: "/shop-brand-medium-duty-3.webp",
+    imageAlt: "Gray Ford F-150 crew cab pickup",
   },
   {
     title: "Pickup Trucks",
     description:
       "Ford, Ram, Chevrolet, GMC, Toyota and Nissan pickups for work sites, towing and everyday driving.",
-    imageSrc: "/shop-brand-pickup-2.webp",
-    imageAlt: "Dark gray pickup truck driving on a highway",
+    imageSrc: "/shop-brand-pickup-4.webp",
+    imageAlt: "Blue Ford F-150 Raptor pickup on a dirt road",
   },
 ] as const;
 
@@ -141,10 +141,10 @@ export default function Home() {
       gsap.set(pill, { autoAlpha: 0, scaleX: 0.35 });
       gsap.set(body, { autoAlpha: 0, y: 24 });
       gsap.set(cta, { autoAlpha: 0, y: 28 });
-      gsap.set(image, { scale: 1.12 });
+      gsap.set(image, { scale: 1 });
 
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
-      intro.to(image, { scale: 1, duration: 2.5, ease: "power2.out" }, 0);
+      intro.to(image, { scale: 1, duration: 0.01 }, 0);
       intro.to(
         heading,
         { autoAlpha: 1, y: 0, scale: 1, duration: 0.9 },
@@ -159,7 +159,7 @@ export default function Home() {
       intro.to(cta, { autoAlpha: 1, y: 0, duration: 0.65 }, 0.68);
 
       gsap.to(bg, {
-        yPercent: 16,
+        yPercent: 0,
         ease: "none",
         scrollTrigger: {
           trigger: hero,
@@ -479,20 +479,20 @@ export default function Home() {
     <main>
       <section
         ref={heroRef}
-        className="relative isolate flex min-h-[calc(100svh-4.75rem)] items-center justify-center overflow-hidden sm:min-h-[calc(100svh-5rem)]"
+        className="relative isolate flex min-h-[calc(100svh-8rem)] items-center justify-center overflow-hidden bg-[#07111f] sm:min-h-[calc(100svh-9rem)]"
       >
         <div
           ref={bgRef}
-          className="absolute inset-x-0 -top-[12%] h-[124%] w-full will-change-transform"
+          className="absolute inset-0 h-full w-full will-change-transform"
         >
           <div ref={imageRef} className="absolute inset-0 will-change-transform">
             <Image
-              src="/hero-bg.webp"
-              alt="Pickup trucks lined up at night"
+              src="/hero-bg-2.webp"
+              alt="Five pickup trucks lined up at night"
               fill
               priority
               sizes="100vw"
-              className="object-cover object-[center_70%]"
+              className="object-cover object-center"
             />
           </div>
           <div className="absolute inset-0 bg-black/25" />
@@ -587,8 +587,8 @@ export default function Home() {
           >
             <div className="overflow-hidden rounded-lg border-b-[3px] border-brand-red">
               <Image
-                src="/move-what-matter-image.webp"
-                alt="White utility truck with service bed"
+                src="/move-what-matters-2.webp"
+                alt="Red Ford pickup parked on a road in the snow"
                 width={1596}
                 height={772}
                 sizes="(max-width: 1140px) calc(100vw - 2rem), 1140px"
@@ -608,8 +608,8 @@ export default function Home() {
           className="absolute inset-x-0 -top-[10%] h-[120%] w-full will-change-transform"
         >
           <Image
-            src="/need-to-sell-sec-image.webp"
-            alt="Semi trucks parked in a lot at sunset"
+            src="/need-to-sell-2.webp"
+            alt="Orange Nissan Titan pickup parked by an industrial building"
             fill
             sizes="100vw"
             className="object-cover object-[center_right]"
