@@ -488,7 +488,7 @@ export default function Home() {
           <div ref={imageRef} className="absolute inset-0 will-change-transform">
             <Image
               src="/hero-bg-2.webp"
-              alt="Five pickup trucks lined up at night"
+              alt="Pickup trucks lined up on a wet city street at night"
               fill
               priority
               sizes="100vw"
