@@ -495,8 +495,8 @@ export default function Home() {
               className="object-cover object-center"
             />
           </div>
-          <div className="absolute inset-0 bg-black/25" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/45" />
+          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.78)_0%,rgba(0,0,0,0.55)_36%,rgba(0,0,0,0.18)_70%,rgba(0,0,0,0.28)_100%)]" />
         </div>
 
         <div className="relative z-10 w-full min-w-0 py-16 sm:py-20">
@@ -509,14 +509,14 @@ export default function Home() {
           </p>
           <h1
             ref={headingRef}
-            className="w-full min-w-0 font-heading uppercase leading-[1.08] tracking-[0.04em] text-white text-[clamp(1.45rem,4.8vw,3.35rem)]"
+            className="w-full min-w-0 font-heading uppercase leading-[1.08] tracking-[0.04em] text-white text-[clamp(1.45rem,4.8vw,3.35rem)] [text-shadow:0_2px_18px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)]"
           >
             Buy &amp; Sell Trucks Across Southern California
           </h1>
 
           <p
             ref={bodyRef}
-            className="mt-5 w-full min-w-0 max-w-[40rem] text-sm font-normal leading-relaxed text-white sm:mt-6 sm:text-base"
+            className="mt-5 w-full min-w-0 max-w-[40rem] text-sm font-normal leading-relaxed text-white sm:mt-6 sm:text-base [text-shadow:0_2px_14px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,0.9)]"
           >
             SoCalTruckTrade is Southern California&apos;s truck-only marketplace.
             Browse listings from local sellers, chat with them directly, or list
