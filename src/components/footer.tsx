@@ -177,6 +177,14 @@ export default function Footer() {
           <p className="text-xs text-white/60 sm:text-sm">
             ©Copyright 2026 Socal All rights reserved.
           </p>
+          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm">
+            <Link href="/privacy" className="text-white/75 transition-colors hover:text-white">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-white/75 transition-colors hover:text-white">
+              Terms and Conditions
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

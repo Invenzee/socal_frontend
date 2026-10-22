@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import PhoneInput from "react-phone-number-input";
@@ -27,6 +28,7 @@ export default function ContactPage() {
   const ctaRef = useRef<HTMLButtonElement>(null);
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [accepted, setAccepted] = useState(false);
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -65,6 +67,10 @@ export default function ContactPage() {
     event.preventDefault();
     if (!form.phone || !isPossiblePhoneNumber(form.phone)) {
       toast.error("Enter a valid phone number for the selected country.");
+      return;
+    }
+    if (!accepted) {
+      toast.error("Please accept the Privacy Policy and Terms and Conditions.");
       return;
     }
     setSubmitting(true);
@@ -177,11 +183,31 @@ export default function ContactPage() {
                     className="w-full resize-y bg-transparent text-sm text-black outline-none placeholder:text-black/40 sm:text-[15px]"
                   />
                 </Field>
+                <label className="flex items-start gap-3 sm:col-span-2">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={accepted}
+                    onChange={(event) => setAccepted(event.target.checked)}
+                    className="mt-1 size-4 shrink-0 accent-brand"
+                  />
+                  <span className="text-sm leading-relaxed text-black/75">
+                    I have read and I accept the{" "}
+                    <Link href="/privacy" className="font-semibold text-brand hover:underline">
+                      Privacy Policy
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/terms" className="font-semibold text-brand hover:underline">
+                      Terms and Conditions
+                    </Link>
+                    .
+                  </span>
+                </label>
                 <div className="flex justify-center sm:col-span-2 sm:pt-2">
                   <button
                     ref={ctaRef}
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || !accepted}
                     className="inline-flex min-w-[180px] cursor-pointer items-center justify-center rounded-[8px] bg-brand-red px-8 py-3.5 text-sm font-semibold text-white sm:text-base"
                   >
                     {submitting ? "Sending..." : "Send message"}
