@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { isPossiblePhoneNumber } from "libphonenumber-js";
-import { RiMailLine, RiPhoneLine } from "react-icons/ri";
+import { RiFacebookFill, RiInstagramFill, RiMailLine, RiPhoneLine } from "react-icons/ri";
 import { toast } from "sonner";
 import { api, ApiRequestError } from "@/lib/api";
 
@@ -15,6 +15,11 @@ gsap.registerPlugin(useGSAP);
 const DETAILS = [
   { href: "tel:+13109629113", label: "+1 310-962-9113", icon: RiPhoneLine },
   { href: "mailto:info@socaltrucktrade.com", label: "info@socaltrucktrade.com", icon: RiMailLine },
+] as const;
+
+const SOCIALS = [
+  { href: "https://www.instagram.com/so.caltrucktrade/", label: "Instagram", icon: RiInstagramFill },
+  { href: "https://www.facebook.com/profile.php?id=61595326367446", label: "Facebook", icon: RiFacebookFill },
 ] as const;
 
 export default function ContactPage() {
@@ -97,6 +102,18 @@ export default function ContactPage() {
             <a
               key={href}
               href={href}
+              className="flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-4 text-sm font-semibold text-white sm:text-base"
+            >
+              <Icon className="size-5 shrink-0" />
+              {label}
+            </a>
+          ))}
+          {SOCIALS.map(({ href, label, icon: Icon }) => (
+            <a
+              key={href}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-4 text-sm font-semibold text-white sm:text-base"
             >
               <Icon className="size-5 shrink-0" />

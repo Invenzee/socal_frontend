@@ -7,11 +7,7 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  RiInstagramFill,
-  RiYoutubeFill,
-  RiTwitterXFill,
-} from "react-icons/ri";
+import { RiFacebookFill, RiInstagramFill } from "react-icons/ri";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -38,21 +34,15 @@ const CONTACT = [
 
 const SOCIALS = [
   {
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/so.caltrucktrade/",
     label: "Instagram",
     icon: RiInstagramFill,
     className: "bg-brand text-white",
   },
   {
-    href: "https://youtube.com",
-    label: "YouTube",
-    icon: RiYoutubeFill,
-    className: "bg-white/20 text-white",
-  },
-  {
-    href: "https://x.com",
-    label: "X",
-    icon: RiTwitterXFill,
+    href: "https://www.facebook.com/profile.php?id=61595326367446",
+    label: "Facebook",
+    icon: RiFacebookFill,
     className: "bg-white/20 text-white",
   },
 ] as const;
