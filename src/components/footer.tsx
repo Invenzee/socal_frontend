@@ -131,7 +131,7 @@ export default function Footer() {
           </div>
 
           <div data-footer-col>
-            <h3 className="text-base font-semibold text-white sm:text-lg">
+            <h3 className="font-heading text-base text-white sm:text-lg">
               Sitemap
             </h3>
             <ul className="mt-4 flex flex-col gap-3">
@@ -149,7 +149,7 @@ export default function Footer() {
           </div>
 
           <div data-footer-col>
-            <h3 className="text-base font-semibold text-white sm:text-lg">
+            <h3 className="font-heading text-base text-white sm:text-lg">
               Contact
             </h3>
             <ul className="mt-4 flex flex-col gap-3">
@@ -172,16 +172,28 @@ export default function Footer() {
 
         <div
           data-footer-bottom
-          className="mt-12 border-t border-white/15 pt-6 text-center sm:mt-14"
+          className="mt-12 flex flex-col items-center gap-3 border-t border-white/15 pt-5 text-center text-xs sm:mt-14 md:flex-row md:justify-between md:gap-4"
         >
-          <p className="text-xs text-white/60 sm:text-sm">
+          <p className="text-white/60 md:flex-1 md:text-left">
             ©Copyright 2026 Socal All rights reserved.
           </p>
-          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm">
-            <Link href="/privacy" className="text-white/75 transition-colors hover:text-white">
+          <p className="text-white/60 md:flex-1 md:text-center">
+            Design and develop by{" "}
+            <a
+              href="https://techcole.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-red"
+            >
+              Techcole
+            </a>
+          </p>
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 md:flex-1 md:justify-end">
+            <Link href="/privacy" className="text-white/90 transition-colors hover:text-white">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-white/75 transition-colors hover:text-white">
+            <span className="h-3 w-px bg-white/30" aria-hidden />
+            <Link href="/terms" className="text-white/90 transition-colors hover:text-white">
               Terms and Conditions
             </Link>
           </p>
