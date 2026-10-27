@@ -45,7 +45,6 @@ export default function LoginForm() {
       title="Login"
       backgroundSrc="/auth-ram-pickup.webp"
       backgroundAlt="Ram 1500 pickup truck"
-      showcaseBackground
       footer={
         <>
           Don&apos;t have an account?{" "}

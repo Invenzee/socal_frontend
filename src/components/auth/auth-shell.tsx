@@ -13,7 +13,6 @@ type AuthShellProps = {
   title: string;
   backgroundSrc: string;
   backgroundAlt: string;
-  showcaseBackground?: boolean;
   children: React.ReactNode;
   footer: React.ReactNode;
 };
@@ -22,7 +21,6 @@ export function AuthShell({
   title,
   backgroundSrc,
   backgroundAlt,
-  showcaseBackground = false,
   children,
   footer,
 }: AuthShellProps) {
@@ -57,7 +55,7 @@ export function AuthShell({
   return (
     <main
       ref={shellRef}
-      className={`relative flex min-h-[100svh] items-center justify-center overflow-hidden px-4 py-12 sm:px-6 sm:py-16 ${showcaseBackground ? "lg:justify-start lg:px-16 xl:px-28" : ""}`}
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-4 py-12 sm:px-6 sm:py-16"
     >
       <div className="absolute inset-0">
         <Image
@@ -66,16 +64,14 @@ export function AuthShell({
           fill
           priority
           sizes="100vw"
-          className={showcaseBackground ? "object-cover object-[60%_center]" : "object-cover object-center"}
+          className="object-cover object-center"
         />
-        <div className={`absolute inset-0 ${showcaseBackground ? "bg-black/20" : "bg-white/78"}`} />
+        <div className="absolute inset-0 bg-white/78" />
       </div>
 
       <div
         data-auth-panel
-        className={showcaseBackground
-          ? "relative z-10 w-full max-w-[440px] rounded-3xl border border-white/70 bg-white/90 px-6 py-8 text-center shadow-2xl backdrop-blur-md sm:px-9 sm:py-10"
-          : "relative z-10 w-full max-w-[420px] text-center"}
+        className="relative z-10 w-full max-w-[420px] text-center"
       >
         <Link href="/" className="inline-block">
           <Image

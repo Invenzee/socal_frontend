@@ -50,7 +50,6 @@ export default function RegisterForm() {
       title="Create an account"
       backgroundSrc="/auth-ram-pickup.webp"
       backgroundAlt="Ram 1500 pickup truck"
-      showcaseBackground
       footer={
         <>
           Already have an account?{" "}
