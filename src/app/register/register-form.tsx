@@ -48,8 +48,9 @@ export default function RegisterForm() {
   return (
     <AuthShell
       title="Create an account"
-      backgroundSrc="https://images.unsplash.com/photo-1464219789935-c2d9d9aba644?auto=format&fit=crop&w=2000&q=80"
-      backgroundAlt="Yellow truck background"
+      backgroundSrc="/auth-ram-pickup.webp"
+      backgroundAlt="Ram 1500 pickup truck"
+      showcaseBackground
       footer={
         <>
           Already have an account?{" "}
