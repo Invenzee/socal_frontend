@@ -29,7 +29,7 @@ const SECTIONS = [
   {
     heading: "Offers",
     paragraphs: [
-      "An offer request is a request for us to contact you. It is not a promise that we will buy the truck, and it is not a finished sale. A price we quote is only binding when both sides confirm it in writing and the truck matches what you described. You are free to decline an offer.",
+      "An offer request is a request for us to contact you. It is not a promise that we will buy the truck, and it is not a finished sale. Any quoted price is subject to verification of the truck's condition, ownership, title, and provided information. An offer becomes binding only upon written agreement by both parties. You are free to decline an offer.",
     ],
   },
   {
@@ -59,7 +59,7 @@ const SECTIONS = [
   {
     heading: "Disclaimers and liability",
     paragraphs: [
-      "The site is provided as available. We do not promise that every listing is error-free or that a buyer and seller will complete a deal. To the extent the law allows, we are not liable for a loss that comes from a deal between users, a truck’s condition, or a delay on the site.",
+      "The website and its services are provided on an \"as is\" and \"as available\" basis. We do not promise that every listing is error-free or that a buyer and seller will complete a deal. To the extent the law allows, we are not liable for a loss that comes from a deal between users, a truck’s condition, or a delay on the site.",
       "Nothing in these terms limits liability that cannot be limited under California law.",
     ],
   },

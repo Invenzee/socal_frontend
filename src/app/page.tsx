@@ -19,8 +19,7 @@ import { useOfferDialog } from "@/providers/offer-dialog-provider";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const SELL_POINTS = [
-  "Quick appraisal and fast offers",
-  "Same-day payment options",
+  "Quick Appraisals and Competitive Offers",
   "Help with paperwork and pick-up",
 ] as const;
 
@@ -578,7 +577,7 @@ export default function Home() {
             your work pickup, the right truck keeps your business moving.
             SoCal Truck Trade brings together new and used trucks from private
             sellers and businesses, so you can compare options and deal directly
-            with the owner, with no middleman and no runaround.
+            with the owner and discuss the deal on your terms.
           </p>
 
           <div
@@ -640,14 +639,15 @@ export default function Home() {
                 </svg>
               </span>{" "}
               Your Truck
-              <span className="block">Fast and Fair</span>
+              <span className="block">Fast, Fair Offers</span>
             </h2>
 
             <p className="mt-4 text-sm leading-relaxed text-white/90 sm:mt-5 sm:text-base">
               Ready to sell? Tell us about your truck and get a fast, fair
               offer, or create a free account and post your own listing to reach
-              buyers across California and neighboring states. We take care of
-              the details so you don&apos;t have to.
+              buyers across California and neighboring states. If you post a
+              listing, you manage the details. If you ask for an offer, we
+              follow up with you.
             </p>
 
             <ul className="mt-6 flex flex-col gap-3 sm:mt-7">
@@ -697,14 +697,14 @@ export default function Home() {
           >
             <span className="block">Shop Trucks</span>
             <span className="block">
-              by <span className="text-brand">Brand</span>
+              by <span className="text-brand">Category</span>
             </span>
           </h2>
           <p
             data-shop-brand-item
             className="mt-3 text-sm text-black sm:mt-4 sm:text-base"
           >
-            Browse inventory by brand name.
+            Explore trucks by category and find the right vehicle for your needs.
           </p>
 
           <ul className="mt-10 grid list-none grid-cols-1 gap-8 p-0 text-left sm:mt-12 lg:mt-14 lg:grid-cols-3 lg:gap-6">

@@ -102,9 +102,9 @@ export default function OfferHomeSection() {
           )}
           {submitted ? null : (
             <p className="mt-4 text-center text-sm text-white/75">
-              Prefer more room?{" "}
+              Need more space?{" "}
               <Link href="/get-an-offer" className="font-semibold text-white underline underline-offset-4 hover:text-white">
-                Open the full page
+                Complete the full offer form.
               </Link>
             </p>
           )}

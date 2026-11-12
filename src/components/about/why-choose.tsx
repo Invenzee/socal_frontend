@@ -18,7 +18,7 @@ const REASONS = [
   {
     step: "02",
     title: "Buy from the owner",
-    body: "Search listings, compare price and mileage, and message the seller directly. There is no middleman in the deal.",
+    body: "Search listings, compare price and mileage, and message the seller directly. Connect directly with sellers and discuss the deal on your terms.",
     stepSide: "right" as const,
   },
   {
@@ -29,7 +29,7 @@ const REASONS = [
   },
   {
     step: "04",
-    title: "Close to the truck",
+    title: "Local Expertise, Wider Reach",
     body: "We are based in Anaheim and connect buyers and sellers across California, Nevada, Arizona, and Oregon.",
     stepSide: "right" as const,
   },

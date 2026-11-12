@@ -10,14 +10,17 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const BRANDS = [
   { name: "Ford", src: "/ford-icon.webp" },
-  { name: "BMW", src: "/bmw-icon.webp" },
+  { name: "Freightliner", src: "/freightliner-wordmark.webp" },
   { name: "Chevrolet", src: "/chevrolet-icon.webp" },
-  { name: "Audi", src: "/audi-icon.webp" },
-  { name: "Mercedes-Benz", src: "/mercedes-icon.webp" },
+  { name: "Peterbilt", src: "/peterbilt-wordmark.webp" },
+  { name: "Kenworth", src: "/kenworth-wordmark.webp" },
   { name: "Toyota", src: "/toyota-icon.webp" },
+  { name: "Mack", src: "/mack-wordmark.webp" },
   { name: "Nissan", src: "/nissan-icon.webp" },
   { name: "Ram", src: "/ram-icon.webp" },
+  { name: "Hino", src: "/hino-wordmark.webp" },
   { name: "GMC", src: "/Group.webp" },
+  { name: "Isuzu", src: "/isuzu-wordmark.webp" },
 ] as const;
 
 export default function AboutBrands() {
