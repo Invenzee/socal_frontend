@@ -181,7 +181,7 @@ export default function Testimonials() {
           </h2>
           <p className="max-w-xl text-sm leading-relaxed text-white/95 sm:text-base lg:pt-2">
             Real people, real trucks, and deals that got done. Here&apos;s what
-            our community has to say about buying and selling on SoCalTruckTrade.
+            our community has to say about buying and selling on SoCal Truck Trade.
           </p>
         </div>
       </div>

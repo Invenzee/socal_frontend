@@ -104,7 +104,7 @@ export default function ReadyToListings() {
           data-ready-item
           className="mt-5 max-w-2xl text-sm leading-relaxed text-black/65 sm:mt-6 sm:text-base"
         >
-          Join SoCalTruckTrade and connect with truck buyers and sellers across
+          Join SoCal Truck Trade and connect with truck buyers and sellers across
           Southern California. Have a question first? Our team is happy to help.
         </p>
         <div
@@ -126,14 +126,6 @@ export default function ReadyToListings() {
             Browse Listings
           </Link>
         </div>
-        <p
-          data-ready-item
-          className="mt-10 max-w-3xl text-xs leading-relaxed text-black/55 sm:mt-12 sm:text-sm"
-        >
-          SoCalTruckTrade is a truck-only marketplace based in Anaheim,
-          California. Buy or sell semis, box trucks and pickups, and connect
-          directly with buyers and sellers across California and nearby states.
-        </p>
       </div>
     </section>
   );

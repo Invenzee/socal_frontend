@@ -109,7 +109,7 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-5 text-sm leading-relaxed text-white/70">
-              SoCalTruckTrade is a truck-only marketplace based in Anaheim,
+              SoCal Truck Trade is a truck-only marketplace based in Anaheim,
               California. Buy or sell semis, box trucks and pickups, and connect
               directly with buyers and sellers across California and nearby
               states.
@@ -175,10 +175,10 @@ export default function Footer() {
           className="mt-12 flex flex-col items-center gap-3 border-t border-white/15 pt-5 text-center text-xs sm:mt-14 md:flex-row md:justify-between md:gap-4"
         >
           <p className="text-white/60 md:flex-1 md:text-left">
-            ©Copyright 2026 Socal All rights reserved.
+            © 2026 SoCal Truck Trade. All rights reserved.
           </p>
           <p className="text-white/60 md:flex-1 md:text-center">
-            Design and develop by{" "}
+            Designed and Developed by{" "}
             <a
               href="https://techcole.com"
               target="_blank"

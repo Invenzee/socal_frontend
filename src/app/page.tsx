@@ -32,15 +32,15 @@ const SHOP_BY_BRAND_CATEGORIES = [
     title: "Heavy-Duty & Semi Trucks",
     description:
       "Freightliner, Peterbilt, Kenworth, Volvo, Mack, International and Western Star trucks for long-haul, regional and vocational work.",
-    imageSrc: "/shop-brand-heavy-duty-3.webp",
-    imageAlt: "White Ram 1500 Big Horn crew cab pickup",
+    imageSrc: "/shop-brand-heavy-duty-4.webp",
+    imageAlt: "Red Peterbilt semi truck parked on a gravel lot",
   },
   {
     title: "Medium-Duty & Commercial Trucks",
     description:
       "Hino and Isuzu trucks for local delivery, box truck routes and light commercial jobs.",
-    imageSrc: "/shop-brand-medium-duty-3.webp",
-    imageAlt: "Gray Ford F-150 crew cab pickup",
+    imageSrc: "/shop-brand-medium-duty-4.webp",
+    imageAlt: "White cab-over box truck parked by a warehouse",
   },
   {
     title: "Pickup Trucks",
@@ -518,7 +518,7 @@ export default function Home() {
             ref={bodyRef}
             className="mt-5 w-full min-w-0 max-w-[40rem] text-sm font-normal leading-relaxed text-white sm:mt-6 sm:text-base [text-shadow:0_2px_14px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,0.9)]"
           >
-            SoCalTruckTrade is Southern California&apos;s truck-only marketplace.
+            SoCal Truck Trade is Southern California&apos;s truck-only marketplace.
             Browse listings from local sellers, chat with them directly, or list
             your own truck in minutes. From semis to pickups, we make buying and
             selling simple.
@@ -576,7 +576,7 @@ export default function Home() {
           <p className="mx-auto mt-5 max-w-[42rem] text-sm font-normal leading-relaxed text-black sm:mt-6 sm:text-base">
             Whether you&apos;re hauling freight, running a fleet, or upgrading
             your work pickup, the right truck keeps your business moving.
-            SoCalTruckTrade brings together new and used trucks from private
+            SoCal Truck Trade brings together new and used trucks from private
             sellers and businesses, so you can compare options and deal directly
             with the owner, with no middleman and no runaround.
           </p>
@@ -848,7 +848,7 @@ export default function Home() {
             className="overflow-hidden rounded-lg border border-black/8 bg-white shadow-[0_16px_0_0_var(--color-brand-red)]"
           >
             <iframe
-              title="Map of SoCalTruckTrade service area centered on Anaheim, California"
+              title="Map of the SoCal Truck Trade service area centered on Anaheim, California"
               src="https://maps.google.com/maps?q=Anaheim%2C+CA&z=8&ie=UTF8&iwloc=&output=embed"
               className="aspect-[4/3] w-full min-h-[240px] border-0 sm:min-h-[280px]"
               loading="lazy"

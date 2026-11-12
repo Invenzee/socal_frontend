@@ -10,7 +10,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const FAQ_ITEMS = [
   {
-    question: "How do I sell my truck on SoCalTruckTrade?",
+    question: "How do I sell my truck on SoCal Truck Trade?",
     answer:
       "Create a free account, post your listing with photos and details, and chat with interested buyers. Or skip the listing and request an offer using the form above.",
   },

@@ -54,11 +54,12 @@ export default function AboutHero() {
         className="container-site grid grid-cols-1 gap-6 pb-10 sm:gap-8 sm:pb-12 lg:grid-cols-2 lg:items-start lg:gap-16 lg:pb-14"
       >
         <h1 className="font-heading uppercase leading-[1.08] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]">
-          All About SoCal Trucks
+          About SoCal Truck Trade
         </h1>
         <p className="max-w-xl text-sm leading-relaxed text-black/70 sm:text-base lg:pt-2">
-          At SoCalTruckTrade, our streamlined process of buying inventory is
-          geared towards customer satisfaction.
+          SoCal Truck Trade is a truck-only marketplace in Anaheim. Buyers
+          compare listings and deal with the seller. Sellers list a truck or
+          ask for an offer.
         </p>
       </div>
 

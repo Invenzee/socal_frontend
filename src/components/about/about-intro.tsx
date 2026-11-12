@@ -83,16 +83,14 @@ export default function AboutIntro() {
       <div className="container-site grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div ref={copyRef} className="max-w-xl">
           <h2 className="font-heading uppercase leading-[1.1] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]">
-            All About SoCal Trucks
+            Our Commitment to Truck Buyers and Sellers
           </h2>
           <p className="mt-5 text-sm leading-relaxed text-black/70 sm:mt-6 sm:text-base">
-            At SoCalTruckTrade, our streamlined process of buying inventory is
-            geared towards customer satisfaction. More often, trucks are
-            undervalued by most car buying companies due to lack of specific
-            knowledge. Our vast experience in commercial inventory and trucks
-            allows us to give customers what they want. Based in Anaheim,
-            California, we are able to cater to customers in all of California
-            and neighboring states.
+            SoCal Truck Trade helps people buy and sell trucks. Sellers can
+            post a listing or request an offer. Buyers can compare semis, box
+            trucks, and pickups, then message the owner. We are based in
+            Anaheim and work with customers across California and nearby
+            states.
           </p>
           <Link
             ref={ctaRef}
