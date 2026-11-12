@@ -31,21 +31,21 @@ const SHOP_BY_BRAND_CATEGORIES = [
   {
     title: "Heavy-Duty & Semi Trucks",
     description:
-      "Freightliner, Peterbilt, Kenworth, Volvo, Mack, International and Western Star trucks for long-haul, regional and vocational work.",
+      "Peterbilt, Kenworth, Freightliner, Volvo, Mack, International, and Western Star trucks listed for sale by their owners. Buy the truck itself. SoCal Truck Trade does not haul freight or sell transportation.",
     imageSrc: "/shop-brand-heavy-duty-4.webp",
     imageAlt: "Red Peterbilt semi truck parked on a gravel lot",
   },
   {
     title: "Medium-Duty & Commercial Trucks",
     description:
-      "Hino and Isuzu trucks for local delivery, box truck routes and light commercial jobs.",
+      "Hino, Isuzu, and similar box trucks listed for sale. Compare listings and buy from the owner. These are trucks for sale, not delivery or transportation service.",
     imageSrc: "/shop-brand-medium-duty-4.webp",
     imageAlt: "White cab-over box truck parked by a warehouse",
   },
   {
     title: "Pickup Trucks",
     description:
-      "Ford, Ram, Chevrolet, GMC, Toyota and Nissan pickups for work sites, towing and everyday driving.",
+      "Ford, Ram, Chevrolet, GMC, Toyota, and Nissan pickups listed by private sellers and businesses. Message the owner and buy the truck directly.",
     imageSrc: "/shop-brand-pickup-4.webp",
     imageAlt: "Blue Ford F-150 Raptor pickup on a dirt road",
   },
