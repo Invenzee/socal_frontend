@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   RiCheckLine,
   RiCloseCircleLine,
+  RiDeleteBin6Line,
   RiExternalLinkLine,
   RiEyeLine,
   RiRefreshLine,
@@ -64,6 +65,8 @@ export default function AdminListingsPage() {
   const [galleryIndex, setGalleryIndex] = useState<number | null>(null);
   const [rejecting, setRejecting] = useState<{ ids: string[]; label: string } | null>(null);
   const [reason, setReason] = useState(QUICK_REASONS[3]);
+  const [pendingDelete, setPendingDelete] = useState<{ ids: string[]; label: string } | null>(null);
+  const [deleteText, setDeleteText] = useState("");
 
   useEffect(() => {
     const timer = window.setTimeout(() => setDebounced(search), 350);
@@ -135,6 +138,25 @@ export default function AdminListingsPage() {
       await load();
     } catch (error) {
       toast.error(error instanceof ApiRequestError ? error.message : "Reject failed");
+    }
+  }
+
+  function askDelete(ids: string[], label: string) {
+    setDeleteText("");
+    setPendingDelete({ ids, label });
+  }
+
+  async function removeListings(ids: string[]) {
+    try {
+      await Promise.all(ids.map((id) => api(`/admin/listings/${id}`, { method: "DELETE" })));
+      toast.success(ids.length === 1 ? "Listing permanently deleted" : `${ids.length} listings permanently deleted`);
+      setSelected((prev) => prev.filter((id) => !ids.includes(id)));
+      setPendingDelete(null);
+      setDeleteText("");
+      setReview(null);
+      await load();
+    } catch (error) {
+      toast.error(error instanceof ApiRequestError ? error.message : "Delete failed");
     }
   }
 
@@ -254,6 +276,14 @@ export default function AdminListingsPage() {
             >
               Reject
             </DashButton>
+            <DashButton
+              variant="red"
+              size="sm"
+              icon={<RiDeleteBin6Line className="text-sm" />}
+              onClick={() => askDelete(ids, `${ids.length} listing${ids.length === 1 ? "" : "s"}`)}
+            >
+              Delete
+            </DashButton>
           </>
         )}
         rowActions={(row) => (
@@ -270,6 +300,12 @@ export default function AdminListingsPage() {
                 onClick={() => setRejecting({ ids: [row.id], label: row.title })}
               />
             ) : null}
+            <ActionIcon
+              label="Delete listing"
+              icon={<RiDeleteBin6Line />}
+              tone="red"
+              onClick={() => askDelete([row.id], row.title)}
+            />
           </>
         )}
         page={meta.page}
@@ -386,6 +422,13 @@ export default function AdminListingsPage() {
                   </DashButton>
                   <DashButton
                     variant="danger"
+                    icon={<RiDeleteBin6Line className="text-base" />}
+                    onClick={() => askDelete([review.id], review.title)}
+                  >
+                    Delete
+                  </DashButton>
+                  <DashButton
+                    variant="danger"
                     icon={<RiCloseCircleLine className="text-base" />}
                     onClick={() => setRejecting({ ids: [review.id], label: review.title })}
                   >
@@ -444,6 +487,56 @@ export default function AdminListingsPage() {
               onClick={() => rejecting && void reject(rejecting.ids)}
             >
               Send rejection
+            </DashButton>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={Boolean(pendingDelete)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingDelete(null);
+            setDeleteText("");
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="text-left">
+            <DialogTitle className="font-heading text-lg">Permanently delete this listing?</DialogTitle>
+            <DialogDescription>
+              {pendingDelete?.label ?? "This listing"} will be removed from the marketplace, along with its photos,
+              saved hearts, leads, and messages. This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <label className="block text-sm text-black/70">
+            Type <span className="font-semibold text-brand-red">delete</span> to confirm
+            <input
+              value={deleteText}
+              onChange={(event) => setDeleteText(event.target.value)}
+              autoComplete="off"
+              autoFocus
+              placeholder="delete"
+              className="mt-2 w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-black outline-none transition-colors focus:border-brand-red focus:ring-3 focus:ring-brand-red/15"
+            />
+          </label>
+          <DialogFooter>
+            <DashButton
+              variant="outline"
+              onClick={() => {
+                setPendingDelete(null);
+                setDeleteText("");
+              }}
+            >
+              Cancel
+            </DashButton>
+            <DashButton
+              variant="red"
+              icon={<RiDeleteBin6Line className="text-base" />}
+              disabled={deleteText !== "delete"}
+              onClick={() => pendingDelete && void removeListings(pendingDelete.ids)}
+            >
+              Delete permanently
             </DashButton>
           </DialogFooter>
         </DialogContent>
