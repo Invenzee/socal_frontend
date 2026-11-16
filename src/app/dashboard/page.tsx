@@ -25,6 +25,7 @@ import RowThumb from "@/components/dashboard/row-thumb";
 import EmptyState from "@/components/dashboard/empty-state";
 import { DashLinkButton } from "@/components/dashboard/dash-button";
 import { api, formatPrice } from "@/lib/api";
+import { ListingPhotoButton } from "@/components/listings/photo-lightbox";
 import { useAuth } from "@/providers/auth-provider";
 import type { AdminStats, Conversation, Listing, PaginationMeta } from "@/types/api";
 
@@ -233,7 +234,9 @@ export default function DashboardHomePage() {
                     href="/dashboard/admin/listings"
                     className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-brand/4 sm:px-5"
                   >
-                    <RowThumb name={item.title} monogram={item.make?.name} src={primaryImage(item)} size={44} />
+                    <ListingPhotoButton images={item.images} title={item.title} className="shrink-0 cursor-zoom-in">
+                      <RowThumb name={item.title} monogram={item.make?.name} src={primaryImage(item)} size={44} />
+                    </ListingPhotoButton>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold text-black">{item.title}</p>
                       <p className="truncate text-xs text-black/45">
@@ -305,7 +308,9 @@ export default function DashboardHomePage() {
                     href={`/listings/${item.id}`}
                     className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-brand/4 sm:px-5"
                   >
-                    <RowThumb name={item.title} monogram={item.make?.name} src={primaryImage(item)} size={44} />
+                    <ListingPhotoButton images={item.images} title={item.title} className="shrink-0 cursor-zoom-in">
+                      <RowThumb name={item.title} monogram={item.make?.name} src={primaryImage(item)} size={44} />
+                    </ListingPhotoButton>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold text-black">{item.title}</p>
                       <p className="truncate text-xs text-black/45">
@@ -400,7 +405,9 @@ export default function DashboardHomePage() {
                     href={`/listings/${item.id}`}
                     className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-brand/4 sm:px-5"
                   >
-                    <RowThumb name={item.title} monogram={item.make?.name} src={primaryImage(item)} size={44} />
+                    <ListingPhotoButton images={item.images} title={item.title} className="shrink-0 cursor-zoom-in">
+                      <RowThumb name={item.title} monogram={item.make?.name} src={primaryImage(item)} size={44} />
+                    </ListingPhotoButton>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold text-black">{item.title}</p>
                       <p className="truncate text-xs text-black/45">

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
@@ -12,7 +11,7 @@ import { api, ApiRequestError, formatMileage, formatPrice } from "@/lib/api";
 import { useAuth } from "@/providers/auth-provider";
 import { useAuthDialog } from "@/providers/auth-dialog-provider";
 import type { Listing } from "@/types/api";
-import { PICKUP_PHOTOS } from "@/components/listings/pickup-photos";
+import { orderedPhotos, PhotoLightbox } from "@/components/listings/photo-lightbox";
 
 gsap.registerPlugin(useGSAP);
 
@@ -23,6 +22,7 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
   const { requestAuth } = useAuthDialog();
   const [phone, setPhone] = useState(listing.contactPhone);
   const [saved, setSaved] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState<number | null>(null);
 
   useGSAP(
     () => {
@@ -109,9 +109,7 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
     }
   }
 
-  const images = PICKUP_PHOTOS;
-  const main = images[0];
-  const rest = images.slice(1, 3);
+  const photos = orderedPhotos(listing.images);
   const description = listing.description.split(/\n+/).filter(Boolean);
   const specs = [
     { label: "Make", value: listing.make?.name },
@@ -143,18 +141,69 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
           <span className="text-black">{listing.title}</span>
         </nav>
 
-        <div data-detail-gallery className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-neutral-200 sm:aspect-[16/9] lg:aspect-auto lg:min-h-[420px]">
-            <Image src={main.url} alt={`${listing.title} main view`} fill priority sizes="(max-width: 1024px) 100vw, 66vw" className="object-cover" />
+        {photos.length === 0 ? (
+          <div className="grid aspect-[16/9] place-items-center rounded-lg bg-neutral-200 text-sm font-medium text-black/40">
+            No photos uploaded
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-1">
-            {rest.concat(rest.length ? [] : images).slice(0, 2).map((image, index) => (
-              <div key={image.publicId + index} className="relative aspect-[16/10] overflow-hidden rounded-lg bg-neutral-200 lg:aspect-auto lg:min-h-[200px]">
-                <Image src={image.url} alt={`${listing.title} ${index}`} fill sizes="(max-width: 1024px) 50vw, 33vw" className="object-cover" />
+        ) : (
+          <div data-detail-gallery>
+            <div className={`grid grid-cols-1 gap-3 sm:gap-4 ${photos.length > 1 ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" : ""}`}>
+              <button
+                type="button"
+                onClick={() => setGalleryIndex(0)}
+                className="relative aspect-[16/10] cursor-zoom-in overflow-hidden rounded-lg bg-neutral-200 sm:aspect-[16/9] lg:aspect-auto lg:min-h-[420px]"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={photos[0].url} alt={`${listing.title} photo 1`} className="size-full object-cover" />
+              </button>
+              {photos.length > 1 ? (
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-1">
+                  {photos.slice(1, 3).map((image, index) => (
+                    <button
+                      key={image.publicId || image.url}
+                      type="button"
+                      onClick={() => setGalleryIndex(index + 1)}
+                      className="relative aspect-[16/10] cursor-zoom-in overflow-hidden rounded-lg bg-neutral-200 lg:aspect-auto lg:min-h-[200px]"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={image.url} alt={`${listing.title} photo ${index + 2}`} className="size-full object-cover" />
+                      {index === 1 && photos.length > 3 ? (
+                        <span className="absolute inset-0 grid place-items-center bg-black/50 text-sm font-semibold text-white">
+                          +{photos.length - 3} more
+                        </span>
+                      ) : null}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+            {photos.length > 1 ? (
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                {photos.map((image, index) => (
+                  <button
+                    key={`${image.publicId || image.url}-thumb`}
+                    type="button"
+                    onClick={() => setGalleryIndex(index)}
+                    className="relative size-16 shrink-0 cursor-zoom-in overflow-hidden rounded-lg bg-neutral-200 ring-1 ring-black/10 sm:size-[4.5rem]"
+                    aria-label={`Open photo ${index + 1}`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={image.url} alt="" className="size-full object-cover" />
+                  </button>
+                ))}
               </div>
-            ))}
+            ) : null}
+            {galleryIndex !== null ? (
+              <PhotoLightbox
+                images={photos}
+                index={galleryIndex}
+                title={listing.title}
+                onClose={() => setGalleryIndex(null)}
+                onIndex={setGalleryIndex}
+              />
+            ) : null}
           </div>
-        </div>
+        )}
 
         <div className="mt-8 grid grid-cols-1 gap-10 lg:mt-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-8 xl:gap-10">
           <div data-detail-content className="min-w-0">

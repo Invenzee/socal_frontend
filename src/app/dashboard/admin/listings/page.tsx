@@ -28,6 +28,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { api, ApiRequestError, formatMileage, formatPrice } from "@/lib/api";
+import { ListingPhotoButton, orderedPhotos, PhotoLightbox } from "@/components/listings/photo-lightbox";
 import type { Listing, PaginationMeta } from "@/types/api";
 
 const STATUS_OPTIONS = [
@@ -60,6 +61,7 @@ export default function AdminListingsPage() {
   const [limit, setLimit] = useState(10);
   const [selected, setSelected] = useState<string[]>([]);
   const [review, setReview] = useState<Listing | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState<number | null>(null);
   const [rejecting, setRejecting] = useState<{ ids: string[]; label: string } | null>(null);
   const [reason, setReason] = useState(QUICK_REASONS[3]);
 
@@ -142,7 +144,9 @@ export default function AdminListingsPage() {
       header: "Listing",
       cell: (row) => (
         <div className="flex min-w-0 items-center gap-3">
-          <RowThumb name={row.title} monogram={row.make?.name} src={primaryImage(row)} size={44} />
+          <ListingPhotoButton images={row.images} title={row.title} className="shrink-0 cursor-zoom-in">
+            <RowThumb name={row.title} monogram={row.make?.name} src={primaryImage(row)} size={44} />
+          </ListingPhotoButton>
           <div className="min-w-0">
             <button
               type="button"
@@ -287,11 +291,15 @@ export default function AdminListingsPage() {
         }
       />
 
-      <Dialog open={Boolean(review)} onOpenChange={(open) => !open && setReview(null)}>
+      <Dialog open={Boolean(review)} onOpenChange={(open) => { if (!open) { setReview(null); setGalleryIndex(null); } }}>
         <DialogContent className="max-h-[90svh] gap-0 overflow-y-auto p-0 sm:max-w-2xl">
           {review ? (
             <>
-              <div className="relative aspect-[16/8] w-full bg-neutral-200">
+              <button
+                type="button"
+                onClick={() => review.images?.length && setGalleryIndex(0)}
+                className="relative aspect-[16/8] w-full cursor-zoom-in bg-neutral-200 text-left"
+              >
                 {primaryImage(review) ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -301,13 +309,13 @@ export default function AdminListingsPage() {
                   />
                 ) : (
                   <span className="grid size-full place-items-center text-xs font-medium text-black/35">
-                    Listing image
+                    No photos uploaded
                   </span>
                 )}
                 <div className="absolute top-3 left-3">
                   <StatusPill status={review.status} className="bg-white/95 backdrop-blur" />
                 </div>
-              </div>
+              </button>
               <div className="p-5">
                 <DialogHeader className="text-left">
                   <DialogTitle className="font-heading text-xl">{review.title}</DialogTitle>
@@ -339,18 +347,30 @@ export default function AdminListingsPage() {
                   {review.description}
                 </p>
 
-                {review.images?.length > 1 ? (
+                {orderedPhotos(review.images).length > 0 ? (
                   <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
-                    {review.images.slice(0, 8).map((image) => (
-                      <span
-                        key={image.publicId}
-                        className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-neutral-200"
+                    {orderedPhotos(review.images).map((image, index) => (
+                      <button
+                        key={image.publicId || image.url}
+                        type="button"
+                        onClick={() => setGalleryIndex(index)}
+                        className="relative size-16 shrink-0 cursor-zoom-in overflow-hidden rounded-lg bg-neutral-200"
+                        aria-label={`Open photo ${index + 1}`}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={image.url} alt="" className="size-full object-cover" />
-                      </span>
+                      </button>
                     ))}
                   </div>
+                ) : null}
+                {galleryIndex !== null ? (
+                  <PhotoLightbox
+                    images={orderedPhotos(review.images)}
+                    index={galleryIndex}
+                    title={review.title}
+                    onClose={() => setGalleryIndex(null)}
+                    onIndex={setGalleryIndex}
+                  />
                 ) : null}
 
                 <DialogFooter className="mt-5 flex-wrap gap-2">

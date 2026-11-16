@@ -21,6 +21,7 @@ import EmptyState from "@/components/dashboard/empty-state";
 import ConfirmDialog from "@/components/dashboard/confirm-dialog";
 import { DashButton, DashLinkButton } from "@/components/dashboard/dash-button";
 import { api, ApiRequestError, formatMileage, formatPrice } from "@/lib/api";
+import { ListingPhotoButton } from "@/components/listings/photo-lightbox";
 import type { Listing, PaginationMeta } from "@/types/api";
 
 const STATUS_OPTIONS = [
@@ -113,7 +114,9 @@ export default function SellerListingsPage() {
       header: "Truck",
       cell: (row) => (
         <div className="flex min-w-0 items-center gap-3">
-          <RowThumb name={row.title} monogram={row.make?.name} src={primaryImage(row)} size={44} />
+          <ListingPhotoButton images={row.images} title={row.title} className="shrink-0 cursor-zoom-in">
+            <RowThumb name={row.title} monogram={row.make?.name} src={primaryImage(row)} size={44} />
+          </ListingPhotoButton>
           <div className="min-w-0">
             <Link
               href={`/listings/${row.id}`}

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -21,6 +20,7 @@ import EmptyState from "@/components/dashboard/empty-state";
 import { DashLinkButton } from "@/components/dashboard/dash-button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { api, ApiRequestError, formatMileage, formatPrice } from "@/lib/api";
+import { ListingPhotoButton } from "@/components/listings/photo-lightbox";
 import type { Listing } from "@/types/api";
 import { cn } from "@/lib/utils";
 
@@ -174,19 +174,16 @@ export default function SavedPage() {
                 className="dash-panel group overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-200">
-                  {image ? (
-                    <Image
-                      src={image}
-                      alt={listing.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <span className="grid size-full place-items-center text-xs font-medium text-black/35">
-                      Listing image
-                    </span>
-                  )}
+                  <ListingPhotoButton images={listing.images} title={listing.title} className="absolute inset-0 block cursor-zoom-in">
+                    {image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={image} alt={listing.title} className="size-full object-cover" />
+                    ) : (
+                      <span className="grid size-full place-items-center text-xs font-medium text-black/35">
+                        No photo
+                      </span>
+                    )}
+                  </ListingPhotoButton>
                   <div className="absolute top-3 left-3">
                     <StatusPill status={listing.status} className="bg-white/95 backdrop-blur" />
                   </div>
@@ -227,12 +224,14 @@ export default function SavedPage() {
         <div data-dash-reveal className="dash-panel divide-y divide-black/5 overflow-hidden">
           {visible.map((listing) => (
             <div key={listing.id} className="flex items-center gap-3 p-3 transition-colors hover:bg-brand/4 sm:p-4">
-              <RowThumb
-                name={listing.title}
-                monogram={listing.make?.name}
-                src={listing.images?.find((item) => item.isPrimary)?.url || listing.images?.[0]?.url}
-                size={52}
-              />
+              <ListingPhotoButton images={listing.images} title={listing.title} className="shrink-0 cursor-zoom-in">
+                <RowThumb
+                  name={listing.title}
+                  monogram={listing.make?.name}
+                  src={listing.images?.find((item) => item.isPrimary)?.url || listing.images?.[0]?.url}
+                  size={52}
+                />
+              </ListingPhotoButton>
               <div className="min-w-0 flex-1">
                 <Link
                   href={`/listings/${listing.id}`}

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { ListingPhotoButton } from "@/components/listings/photo-lightbox";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -564,11 +564,12 @@ export default function MessagesPage() {
                 href={`/listings/${entityId(active.listing)}`}
                 className="flex items-center gap-3 border-b border-black/6 bg-brand/5 px-3 py-2 transition-colors hover:bg-brand/10 sm:px-4"
               >
-                <span className="relative size-9 shrink-0 overflow-hidden rounded-md bg-neutral-200">
+                <ListingPhotoButton images={active.listing.images} title={active.listing.title} className="relative size-9 shrink-0 cursor-zoom-in overflow-hidden rounded-md bg-neutral-200">
                   {listingImage ? (
-                    <Image src={listingImage} alt="" fill sizes="36px" className="object-cover" />
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={listingImage} alt="" className="size-full object-cover" />
                   ) : null}
-                </span>
+                </ListingPhotoButton>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-xs font-semibold text-black">{active.listing.title}</span>
                   <span className="block text-[11px] text-brand">{formatPrice(active.listing.price)}</span>
