@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Momo_Trust_Display, Poppins } from "next/font/google";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import TawkChat from "@/components/tawk-chat";
 import { AppProviders } from "@/components/app-providers";
 import "./globals.css";
 
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Header />
           <div className="flex-1">{children}</div>
           <Footer />
+          <TawkChat />
         </AppProviders>
       </body>
     </html>
