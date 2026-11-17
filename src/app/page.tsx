@@ -95,7 +95,7 @@ export default function Home() {
   const bgRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const pillRef = useRef<HTMLParagraphElement>(null);
+  const pillRef = useRef<HTMLButtonElement>(null);
   const bodyRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLButtonElement>(null);
   const moveRef = useRef<HTMLElement>(null);
@@ -500,12 +500,21 @@ export default function Home() {
 
         <div className="relative z-10 w-full min-w-0 py-16 sm:py-20">
         <div className="container-site flex min-w-0 flex-col items-center px-0 text-center">
-          <p
+          <button
             ref={pillRef}
-            className="mb-5 inline-flex max-w-full origin-center items-center justify-center rounded-full bg-brand-red px-5 py-2.5 text-center text-[clamp(0.48rem,1.4vw,0.9rem)] font-bold uppercase tracking-[0.14em] text-white text-balance sm:px-10 sm:py-3"
+            type="button"
+            onClick={() => {
+              if (loading) return;
+              if (user) {
+                router.push("/sell");
+                return;
+              }
+              requestOpen();
+            }}
+            className="mb-5 inline-flex max-w-full origin-center cursor-pointer items-center justify-center rounded-full border-0 bg-brand-red px-5 py-2.5 text-center text-[clamp(0.48rem,1.4vw,0.9rem)] font-bold uppercase tracking-[0.14em] text-white text-balance transition-[filter,transform] duration-150 hover:brightness-110 sm:px-10 sm:py-3"
           >
             Get a fast, fair offer today.
-          </p>
+          </button>
           <h1
             ref={headingRef}
             className="w-full min-w-0 font-heading uppercase leading-[1.08] tracking-[0.04em] text-white text-[clamp(1.45rem,4.8vw,3.35rem)] [text-shadow:0_2px_18px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)]"
