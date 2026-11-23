@@ -98,14 +98,15 @@ export default function ReadyToListings() {
           className="max-w-3xl font-heading uppercase leading-[1.15] tracking-[0.04em] text-black text-[clamp(1.75rem,6vw,50px)]"
         >
           Ready to Buy or Sell
-          <span className="block">a Truck Today?</span>
+          <span className="block">a Commercial Vehicle?</span>
         </h2>
         <p
           data-ready-item
           className="mt-5 max-w-2xl text-sm leading-relaxed text-black/65 sm:mt-6 sm:text-base"
         >
-          Join SoCal Truck Trade and connect with truck buyers and sellers across
-          Southern California. Have a question first? Our team is happy to help.
+          Join SoCal Truck Trade and connect with commercial fleet buyers and
+          sellers across Southern California. Have a question first? Our team is
+          happy to help.
         </p>
         <div
           data-ready-item

@@ -13,6 +13,7 @@ import Testimonials from "@/components/testimonials";
 import HomeFaq from "@/components/home-faq";
 import ReadyToListings from "@/components/ready-to-listings";
 import OfferHomeSection from "@/components/offer/offer-home-section";
+import CommercialFleetSection from "@/components/commercial-fleet-section";
 import { useAuth } from "@/providers/auth-provider";
 import { useOfferDialog } from "@/providers/offer-dialog-provider";
 
@@ -519,17 +520,16 @@ export default function Home() {
             ref={headingRef}
             className="w-full min-w-0 font-heading uppercase leading-[1.08] tracking-[0.04em] text-white text-[clamp(1.45rem,4.8vw,3.35rem)] [text-shadow:0_2px_18px_rgba(0,0,0,0.9),0_1px_2px_rgba(0,0,0,0.95)]"
           >
-            Buy &amp; Sell Trucks Across Southern California
+            Buy &amp; Sell Commercial Trucks in Southern California
           </h1>
 
           <p
             ref={bodyRef}
             className="mt-5 w-full min-w-0 max-w-[40rem] text-sm font-normal leading-relaxed text-white sm:mt-6 sm:text-base [text-shadow:0_2px_14px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,0.9)]"
           >
-            SoCal Truck Trade is Southern California&apos;s truck-only marketplace.
-            Browse listings from local sellers, chat with them directly, or list
-            your own truck in minutes. From semis to pickups, we make buying and
-            selling simple.
+            SoCal Truck Trade is Southern California&apos;s commercial fleet
+            marketplace. Browse work trucks and fleet vehicles from local
+            sellers, chat with them directly, or list your own in minutes.
           </p>
 
           <button
@@ -578,15 +578,15 @@ export default function Home() {
               </svg>
             </span>{" "}
             Matters
-            <span className="block">Trucks for Every Job</span>
+            <span className="block">Fleet Vehicles for Every Job</span>
           </h2>
 
           <p className="mx-auto mt-5 max-w-[42rem] text-sm font-normal leading-relaxed text-black sm:mt-6 sm:text-base">
             Whether you&apos;re hauling freight, running a fleet, or upgrading
-            your work pickup, the right truck keeps your business moving.
-            SoCal Truck Trade brings together new and used trucks from private
-            sellers and businesses, so you can compare options and deal directly
-            with the owner and discuss the deal on your terms.
+            a service vehicle, the right commercial truck keeps your business
+            moving. SoCal Truck Trade brings together work trucks and fleet
+            vehicles from private sellers and businesses, so you can compare
+            options and discuss the deal directly with the owner.
           </p>
 
           <div
@@ -595,10 +595,10 @@ export default function Home() {
           >
             <div className="overflow-hidden rounded-lg border-b-[3px] border-brand-red">
               <Image
-                src="/move-what-matters-2.webp"
-                alt="Red Ford pickup parked on a road in the snow"
-                width={1596}
-                height={772}
+                src="/ford-service-box-truck.webp"
+                alt="White Ford F-450 commercial service truck with a large utility body"
+                width={1800}
+                height={1313}
                 sizes="(max-width: 1140px) calc(100vw - 2rem), 1140px"
                 className="h-auto w-full object-cover"
               />
@@ -746,6 +746,8 @@ export default function Home() {
           </ul>
         </div>
       </section>
+
+      <CommercialFleetSection />
 
       <section ref={howItWorksRef} className="bg-white pt-16 sm:pt-20 lg:pt-24">
         <div className="container-site text-center">

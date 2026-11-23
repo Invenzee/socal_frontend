@@ -3,14 +3,14 @@ import LegalDocument from "@/components/legal-document";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | SoCal Truck Trade",
-  description: "How SoCal Truck Trade collects, uses, and shares information on the truck marketplace.",
+  description: "How SoCal Truck Trade collects, uses, and shares information on its commercial fleet marketplace.",
 };
 
 const SECTIONS = [
   {
     heading: "Who we are",
     paragraphs: [
-      "SoCal Truck Trade is a truck-only marketplace based in Anaheim, California. Buyers and sellers use the site to list trucks, request offers, browse inventory, and message each other. This policy explains what we collect when you use socaltrucktrade.com, create an account, post a listing, request an offer, or contact us.",
+      "SoCal Truck Trade is a commercial fleet marketplace based in Anaheim, California. Buyers and sellers use the site to list commercial vehicles, request offers, browse inventory, and message each other. This policy explains what we collect when you use socaltrucktrade.com, create an account, post a listing, request an offer, or contact us.",
     ],
   },
   {

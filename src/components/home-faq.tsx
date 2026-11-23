@@ -22,7 +22,7 @@ const FAQ_ITEMS = [
   {
     question: "What types of trucks can I find here?",
     answer:
-      "Semi trucks, box trucks, medium-duty commercial trucks and pickups from brands like Freightliner, Peterbilt, Kenworth, Ford and Ram.",
+      "Explore semis, box trucks, utility and service trucks, cargo vans, and pickups from brands like Freightliner, Peterbilt, Kenworth, Ford, and Ram. Available inventory depends on current seller listings.",
   },
   {
     question: "Is it free to list a truck?",

@@ -10,7 +10,7 @@ const SECTIONS = [
   {
     heading: "The marketplace",
     paragraphs: [
-      "SoCal Truck Trade is a truck-only marketplace based in Anaheim, California. Sellers can list a truck or ask us for an offer. Buyers can search listings and message the seller. Unless we send you a written offer to buy your truck, the sale is between the buyer and the seller. We do not own the trucks listed by users.",
+      "SoCal Truck Trade is a commercial fleet marketplace based in Anaheim, California. Sellers can list a commercial vehicle or ask us for an offer. Buyers can search listings and message the seller. Unless we send you a written offer to buy your vehicle, the sale is between the buyer and the seller. We do not own the vehicles listed by users.",
     ],
   },
   {
@@ -22,7 +22,7 @@ const SECTIONS = [
   {
     heading: "Listings",
     paragraphs: [
-      "If you post a truck, you confirm that the details and photos are accurate and that you have the right to sell it. Do not list a truck you do not control. We can edit, refuse, or remove a listing that is misleading, incomplete, or not a truck we cover.",
+      "If you post a commercial vehicle, you confirm that the details and photos are accurate and that you have the right to sell it. Do not list a vehicle you do not control. We can edit, refuse, or remove a listing that is misleading, incomplete, or outside the vehicles we cover.",
       "Creating an account and browsing listings is free. If a listing fee applies, we will say so before you are charged.",
     ],
   },

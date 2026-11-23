@@ -57,9 +57,9 @@ export default function AboutHero() {
           About SoCal Truck Trade
         </h1>
         <p className="max-w-xl text-sm leading-relaxed text-black/70 sm:text-base lg:pt-2">
-          SoCal Truck Trade is a truck-only marketplace in Anaheim. Buyers
-          compare listings and deal with the seller. Sellers list a truck or
-          ask for an offer.
+          SoCal Truck Trade is a commercial fleet marketplace in Anaheim.
+          Buyers compare work trucks and fleet vehicles, then deal with the
+          seller. Sellers can list a vehicle or ask for an offer.
         </p>
       </div>
 
