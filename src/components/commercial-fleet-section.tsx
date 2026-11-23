@@ -5,7 +5,7 @@ const FLEET_TYPES = [
   {
     title: "Utility & service trucks",
     description: "Find the setup that works for your crew and your next job.",
-    imageSrc: "/ram-utility-bed.webp",
+    imageSrc: "/ram-utility-bed-photo.jpg",
     imageAlt: "White Ram utility bed truck with a ladder rack",
     terms: [
       "Plumber truck",
