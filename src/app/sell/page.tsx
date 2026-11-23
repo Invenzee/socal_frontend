@@ -15,6 +15,7 @@ import { getGuestId } from "@/lib/guest";
 import { useAuth } from "@/providers/auth-provider";
 import { useAuthDialog } from "@/providers/auth-dialog-provider";
 import { cn } from "@/lib/utils";
+import { isVehicleYear, VEHICLE_YEAR_OPTIONS } from "@/lib/vehicle-years";
 import type { ListingImage, OfferLead, TaxonomyItem } from "@/types/api";
 
 gsap.registerPlugin(useGSAP);
@@ -179,7 +180,7 @@ export default function SellPage() {
         });
         setForm((prev) => ({
           ...prev,
-          year: String(item.year || prev.year),
+          year: isVehicleYear(item.year) ? String(item.year) : prev.year,
           mileage: String(item.mileage ?? prev.mileage),
           licensePlate: item.licensePlate || prev.licensePlate,
           make: entityId(item.make) || prev.make,
@@ -262,6 +263,10 @@ export default function SellPage() {
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!isVehicleYear(form.year)) {
+      toast.error("Select a vehicle year from 1950 to 2016.");
+      return;
+    }
     if (images.length < 1) {
       toast.error("Add at least one photo.");
       return;
@@ -432,7 +437,7 @@ export default function SellPage() {
               <SectionLabel>Vehicle details</SectionLabel>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
                 <TextInput placeholder="Truck Name" value={form.title} onChange={(v) => setField("title", v)} />
-                <TextInput placeholder="Year" value={form.year} onChange={(v) => setField("year", v)} />
+                <SelectInput placeholder="Year" value={form.year} onChange={(v) => setField("year", v)} options={VEHICLE_YEAR_OPTIONS} />
                 <TextInput placeholder="Price" value={form.price} onChange={(v) => setField("price", v)} />
                 <TextInput placeholder="License Plate#" value={form.licensePlate} onChange={(v) => setField("licensePlate", v)} />
                 <SelectInput placeholder="State" value={form.state} onChange={(v) => setField("state", v)} options={US_STATES.map((name) => ({ id: name, name }))} />

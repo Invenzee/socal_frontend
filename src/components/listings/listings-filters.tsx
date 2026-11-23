@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { RiCheckLine } from "react-icons/ri";
 import type { TaxonomyItem } from "@/types/api";
+import { isVehicleYear, VEHICLE_YEAR_OPTIONS } from "@/lib/vehicle-years";
 
 const GROUPS = ["condition", "make", "category", "fuel", "transmission"] as const;
 type FilterGroup = (typeof GROUPS)[number];
@@ -124,8 +125,14 @@ export default function ListingsFilters({
   const [showAllMakes, setShowAllMakes] = useState(false);
   const [priceMin, setPriceMin] = useState(searchParams.get("priceMin") || "");
   const [priceMax, setPriceMax] = useState(searchParams.get("priceMax") || "");
-  const [yearMin, setYearMin] = useState(searchParams.get("yearMin") || "");
-  const [yearMax, setYearMax] = useState(searchParams.get("yearMax") || "");
+  const [yearMin, setYearMin] = useState(() => {
+    const year = searchParams.get("yearMin") || "";
+    return isVehicleYear(year) ? year : "";
+  });
+  const [yearMax, setYearMax] = useState(() => {
+    const year = searchParams.get("yearMax") || "";
+    return isVehicleYear(year) ? year : "";
+  });
   const [kmMin, setKmMin] = useState(searchParams.get("mileageMin") || "");
   const [kmMax, setKmMax] = useState(searchParams.get("mileageMax") || "");
 
@@ -282,11 +289,17 @@ export default function ListingsFilters({
           <div className="flex border-y border-black/8 bg-white">
             <div className="flex flex-1 items-center justify-between gap-2 px-3 py-2.5">
               <span className="text-sm text-black/35">min</span>
-              <input type="text" inputMode="numeric" value={yearMin} onChange={(e) => setYearMin(e.target.value)} className="w-14 bg-transparent text-right text-sm text-black/70 outline-none" />
+              <select aria-label="Minimum vehicle year" value={yearMin} onChange={(e) => setYearMin(e.target.value)} className="w-20 bg-transparent text-right text-sm text-black/70 outline-none">
+                <option value="">Any</option>
+                {VEHICLE_YEAR_OPTIONS.map((year) => <option key={year.id} value={year.id}>{year.name}</option>)}
+              </select>
             </div>
             <div className="flex flex-1 items-center justify-between gap-2 border-l border-black/8 px-3 py-2.5">
               <span className="text-sm text-black/35">max</span>
-              <input type="text" inputMode="numeric" value={yearMax} onChange={(e) => setYearMax(e.target.value)} className="w-14 bg-transparent text-right text-sm text-black/70 outline-none" />
+              <select aria-label="Maximum vehicle year" value={yearMax} onChange={(e) => setYearMax(e.target.value)} className="w-20 bg-transparent text-right text-sm text-black/70 outline-none">
+                <option value="">Any</option>
+                {VEHICLE_YEAR_OPTIONS.map((year) => <option key={year.id} value={year.id}>{year.name}</option>)}
+              </select>
             </div>
           </div>
           <div className="mt-2 px-3 py-2">

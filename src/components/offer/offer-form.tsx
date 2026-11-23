@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -11,9 +11,7 @@ import { api, ApiRequestError } from "@/lib/api";
 import { getGuestId, markOfferSubmitted } from "@/lib/guest";
 import type { TaxonomyItem } from "@/types/api";
 import { cn } from "@/lib/utils";
-
-const currentYear = new Date().getFullYear();
-const YEARS = Array.from({ length: currentYear + 1 - 1950 + 1 }, (_, index) => String(currentYear + 1 - index));
+import { isVehicleYear, VEHICLE_YEAR_OPTIONS } from "@/lib/vehicle-years";
 
 type OfferFormProps = {
   compact?: boolean;
@@ -87,11 +85,13 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
       .catch(() => setModels([]));
   }, [form.make]);
 
-  const yearOptions = useMemo(() => YEARS.map((year) => ({ id: year, name: year })), []);
-
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
+    if (!isVehicleYear(form.year)) {
+      setError("Select a vehicle year from 1950 to 2016.");
+      return;
+    }
     if (!form.phone || !isPossiblePhoneNumber(form.phone)) {
       setError("Enter a valid phone number for the selected country.");
       return;
@@ -172,7 +172,7 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
           placeholder="Year"
           value={form.year}
           onChange={(value) => setField("year", value)}
-          options={yearOptions}
+          options={VEHICLE_YEAR_OPTIONS}
           required
         />
         <SelectField
