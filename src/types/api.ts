@@ -49,6 +49,10 @@ export type Listing = {
   price: number;
   make: TaxonomyItem;
   model: TaxonomyItem;
+  customMake?: string;
+  customModel?: string;
+  truckType?: string;
+  customTruckType?: string;
   category: TaxonomyItem;
   condition: TaxonomyItem;
   fuel: TaxonomyItem;
@@ -145,6 +149,10 @@ export type OfferLead = {
   createdAt: string;
   make?: TaxonomyItem | string;
   model?: TaxonomyItem | string;
+  customMake?: string;
+  customModel?: string;
+  truckType?: string;
+  customTruckType?: string;
   condition?: TaxonomyItem | string;
 };
 

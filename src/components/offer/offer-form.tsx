@@ -12,6 +12,7 @@ import { getGuestId, markOfferSubmitted } from "@/lib/guest";
 import type { TaxonomyItem } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { isVehicleYear, VEHICLE_YEAR_OPTIONS } from "@/lib/vehicle-years";
+import { formMakes, formModels, TRUCK_TYPE_OPTIONS } from "@/lib/truck-details";
 
 type OfferFormProps = {
   compact?: boolean;
@@ -61,6 +62,10 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
     year: "",
     make: "",
     model: "",
+    customMake: "",
+    customModel: "",
+    truckType: "",
+    customTruckType: "",
     mileage: "",
     condition: "",
     city: "",
@@ -68,6 +73,10 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
   });
 
   const setField = (key: keyof typeof form, value: string) => setForm((prev) => ({ ...prev, [key]: value }));
+  const selectedMake = taxonomy.makes.find((item) => item.id === form.make);
+  const selectedModel = models.find((item) => item.id === form.model);
+  const isOtherMake = selectedMake?.slug === "other";
+  const isOtherModel = selectedModel?.slug === "other";
 
   useEffect(() => {
     void api<{ makes: TaxonomyItem[]; conditions: TaxonomyItem[] }>("/taxonomy/all")
@@ -92,6 +101,10 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
       setError("Select a vehicle year from 1950 to 2016.");
       return;
     }
+    if ((isOtherMake && !form.customMake.trim()) || (isOtherModel && !form.customModel.trim()) || (form.truckType === "Other" && !form.customTruckType.trim())) {
+      setError("Enter the details for each Other option selected.");
+      return;
+    }
     if (!form.phone || !isPossiblePhoneNumber(form.phone)) {
       setError("Enter a valid phone number for the selected country.");
       return;
@@ -109,6 +122,10 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
           year: Number(form.year),
           make: form.make,
           model: form.model,
+          customMake: form.customMake.trim(),
+          customModel: form.customModel.trim(),
+          truckType: form.truckType,
+          customTruckType: form.customTruckType.trim(),
           mileage: Number(form.mileage),
           condition: form.condition,
           city: form.city,
@@ -180,20 +197,29 @@ export default function OfferForm({ compact = false, tone = "plain", onSuccess, 
           placeholder="Make"
           value={form.make}
           onChange={(value) => {
-            setField("make", value);
-            setField("model", "");
+            setForm((prev) => ({ ...prev, make: value, model: "", customMake: "", customModel: "" }));
           }}
-          options={taxonomy.makes}
+          options={formMakes(taxonomy.makes)}
           required
         />
+        {isOtherMake ? (
+          <TextField tone={tone} placeholder="Enter make" value={form.customMake} onChange={(value) => setField("customMake", value)} required />
+        ) : null}
         <SelectField
           tone={tone}
           placeholder="Model"
           value={form.model}
-          onChange={(value) => setField("model", value)}
-          options={models}
+          onChange={(value) => setForm((prev) => ({ ...prev, model: value, customModel: "" }))}
+          options={formModels(selectedMake?.name || "", models)}
           required
         />
+        {isOtherModel ? (
+          <TextField tone={tone} placeholder="Enter model" value={form.customModel} onChange={(value) => setField("customModel", value)} required />
+        ) : null}
+        <SelectField tone={tone} placeholder="Truck type" value={form.truckType} onChange={(value) => setForm((prev) => ({ ...prev, truckType: value, customTruckType: "" }))} options={TRUCK_TYPE_OPTIONS} required />
+        {form.truckType === "Other" ? (
+          <TextField tone={tone} placeholder="Enter truck type" value={form.customTruckType} onChange={(value) => setField("customTruckType", value)} required />
+        ) : null}
         <TextField
           tone={tone}
           placeholder="Mileage"

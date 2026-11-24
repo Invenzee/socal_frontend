@@ -16,6 +16,7 @@ import { useAuth } from "@/providers/auth-provider";
 import { useAuthDialog } from "@/providers/auth-dialog-provider";
 import { cn } from "@/lib/utils";
 import { isVehicleYear, VEHICLE_YEAR_OPTIONS } from "@/lib/vehicle-years";
+import { formMakes, formModels, TRUCK_TYPE_OPTIONS } from "@/lib/truck-details";
 import type { ListingImage, OfferLead, TaxonomyItem } from "@/types/api";
 
 gsap.registerPlugin(useGSAP);
@@ -126,6 +127,10 @@ export default function SellPage() {
     vin: "",
     make: "",
     model: "",
+    customMake: "",
+    customModel: "",
+    truckType: "",
+    customTruckType: "",
     features: [] as string[],
     condition: "",
     category: "",
@@ -144,6 +149,10 @@ export default function SellPage() {
   });
 
   const setField = (key: keyof typeof form, value: string | string[]) => setForm((prev) => ({ ...prev, [key]: value }));
+  const selectedMake = taxonomy.makes.find((item) => item.id === form.make);
+  const selectedModel = models.find((item) => item.id === form.model);
+  const isOtherMake = selectedMake?.slug === "other";
+  const isOtherModel = selectedModel?.slug === "other";
 
   useEffect(() => {
     void api<{ makes: TaxonomyItem[]; features: TaxonomyItem[]; conditions: TaxonomyItem[]; categories: TaxonomyItem[]; fuels: TaxonomyItem[]; transmissions: TaxonomyItem[] }>("/taxonomy/all")
@@ -184,6 +193,10 @@ export default function SellPage() {
           mileage: String(item.mileage ?? prev.mileage),
           licensePlate: item.licensePlate || prev.licensePlate,
           make: entityId(item.make) || prev.make,
+          customMake: item.customMake || "",
+          customModel: item.customModel || "",
+          truckType: item.truckType || "",
+          customTruckType: item.customTruckType || "",
           condition: entityId(item.condition) || prev.condition,
         }));
         setPendingModel(entityId(item.model));
@@ -199,13 +212,13 @@ export default function SellPage() {
   }, [models, pendingModel]);
 
   useEffect(() => {
-    if (didPrefillTitle.current || form.title || !form.year || !form.make) return;
-    const makeName = taxonomy.makes.find((item) => item.id === form.make)?.name;
-    const modelName = models.find((item) => item.id === form.model)?.name;
-    if (!makeName) return;
+    if (didPrefillTitle.current || form.title || !form.year || !form.make || !form.model) return;
+    const makeName = isOtherMake ? form.customMake.trim() : selectedMake?.name;
+    const modelName = isOtherModel ? form.customModel.trim() : selectedModel?.name;
+    if (!makeName || !modelName) return;
     didPrefillTitle.current = true;
     setField("title", [form.year, makeName, modelName].filter(Boolean).join(" "));
-  }, [form.title, form.year, form.make, form.model, taxonomy.makes, models]);
+  }, [form.title, form.year, form.make, form.model, form.customMake, form.customModel, isOtherMake, isOtherModel, selectedMake, selectedModel]);
 
   useGSAP(
     () => {
@@ -267,6 +280,14 @@ export default function SellPage() {
       toast.error("Select a vehicle year from 1950 to 2016.");
       return;
     }
+    if (!form.make || !form.model || !form.truckType) {
+      toast.error("Select a make, model, and truck type.");
+      return;
+    }
+    if ((isOtherMake && !form.customMake.trim()) || (isOtherModel && !form.customModel.trim()) || (form.truckType === "Other" && !form.customTruckType.trim())) {
+      toast.error("Enter the details for each Other option selected.");
+      return;
+    }
     if (images.length < 1) {
       toast.error("Add at least one photo.");
       return;
@@ -303,6 +324,10 @@ export default function SellPage() {
       price: Number(form.price),
       make: form.make,
       model: form.model,
+      customMake: form.customMake.trim(),
+      customModel: form.customModel.trim(),
+      truckType: form.truckType,
+      customTruckType: form.customTruckType.trim(),
       category: form.category,
       condition: form.condition,
       fuel: form.fuel,
@@ -443,8 +468,12 @@ export default function SellPage() {
                 <SelectInput placeholder="State" value={form.state} onChange={(v) => setField("state", v)} options={US_STATES.map((name) => ({ id: name, name }))} />
                 <TextInput placeholder="Mileage" value={form.mileage} onChange={(v) => setField("mileage", v)} />
                 <TextInput placeholder="VIN#" value={form.vin} onChange={(v) => setField("vin", v)} />
-                <SelectInput placeholder="Make" value={form.make} onChange={(v) => { setField("make", v); setField("model", ""); }} options={taxonomy.makes} />
-                <SelectInput placeholder="Model" value={form.model} onChange={(v) => setField("model", v)} options={models} />
+                <SelectInput placeholder="Make" value={form.make} onChange={(v) => setForm((prev) => ({ ...prev, make: v, model: "", customMake: "", customModel: "" }))} options={formMakes(taxonomy.makes)} />
+                {isOtherMake ? <TextInput placeholder="Enter make" value={form.customMake} onChange={(v) => setField("customMake", v)} /> : null}
+                <SelectInput placeholder="Model" value={form.model} onChange={(v) => setForm((prev) => ({ ...prev, model: v, customModel: "" }))} options={formModels(selectedMake?.name || "", models)} />
+                {isOtherModel ? <TextInput placeholder="Enter model" value={form.customModel} onChange={(v) => setField("customModel", v)} /> : null}
+                <SelectInput placeholder="Truck type" value={form.truckType} onChange={(v) => setForm((prev) => ({ ...prev, truckType: v, customTruckType: "" }))} options={TRUCK_TYPE_OPTIONS} />
+                {form.truckType === "Other" ? <TextInput placeholder="Enter truck type" value={form.customTruckType} onChange={(v) => setField("customTruckType", v)} /> : null}
                 <SelectInput placeholder="Category" value={form.category} onChange={(v) => setField("category", v)} options={taxonomy.categories} />
                 <SelectInput placeholder="Condition" value={form.condition} onChange={(v) => setField("condition", v)} options={taxonomy.conditions} />
                 <SelectInput placeholder="Fuel" value={form.fuel} onChange={(v) => setField("fuel", v)} options={taxonomy.fuels} />

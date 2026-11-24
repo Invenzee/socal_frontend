@@ -178,7 +178,7 @@ export default function AdminListingsPage() {
               {row.title}
             </button>
             <p className="truncate text-xs text-black/45">
-              {row.year} · {row.make?.name} {row.model?.name} · {formatMileage(row.mileage)}
+              {row.year} · {row.customMake || row.make?.name} {row.customModel || row.model?.name} · {formatMileage(row.mileage)}
             </p>
           </div>
         </div>
@@ -378,6 +378,11 @@ export default function AdminListingsPage() {
                     </div>
                   ))}
                 </div>
+
+                <p className="mt-3 text-sm text-black/65">
+                  {review.customMake || review.make?.name} {review.customModel || review.model?.name}
+                  {review.truckType ? ` · ${review.customTruckType || review.truckType}` : ""}
+                </p>
 
                 <p className="mt-4 max-h-32 overflow-y-auto text-sm leading-relaxed text-black/65">
                   {review.description}

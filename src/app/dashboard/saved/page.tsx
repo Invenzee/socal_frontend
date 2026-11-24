@@ -240,7 +240,7 @@ export default function SavedPage() {
                   {listing.title}
                 </Link>
                 <p className="truncate text-xs text-black/45">
-                  {listing.year} · {formatMileage(listing.mileage)} · {listing.make?.name} {listing.model?.name}
+                  {listing.year} · {formatMileage(listing.mileage)} · {listing.customMake || listing.make?.name} {listing.customModel || listing.model?.name}
                 </p>
               </div>
               <span className="hidden font-semibold text-brand tabular-nums sm:block">

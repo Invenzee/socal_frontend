@@ -192,7 +192,7 @@ export default function AdminOffersPage() {
       cell: (row) => (
         <div className="min-w-0">
           <p className="truncate font-medium text-black">
-            {row.year} {taxName(row.make)} {taxName(row.model)}
+            {row.year} {row.customMake || taxName(row.make)} {row.customModel || taxName(row.model)}
           </p>
         </div>
       ),
@@ -345,8 +345,9 @@ export default function AdminOffersPage() {
               />
               <Detail
                 label="Vehicle"
-                value={`${viewTarget.year} ${taxName(viewTarget.make)} ${taxName(viewTarget.model)}`}
+                value={`${viewTarget.year} ${viewTarget.customMake || taxName(viewTarget.make)} ${viewTarget.customModel || taxName(viewTarget.model)}`}
               />
+              <Detail label="Truck type" value={viewTarget.customTruckType || viewTarget.truckType || "—"} />
               <Detail label="Condition" value={taxName(viewTarget.condition)} />
               <Detail label="License plate" value={viewTarget.licensePlate || "—"} />
               <Detail label="Mileage" value={`${viewTarget.mileage.toLocaleString("en-US")} mi`} />
@@ -410,7 +411,7 @@ export default function AdminOffersPage() {
             <DialogTitle className="font-heading text-xl text-black">Send offer email</DialogTitle>
             <DialogDescription className="text-sm text-black/60">
               {emailTarget
-                ? `${emailTarget.year} ${taxName(emailTarget.make)} ${taxName(emailTarget.model)} · ${emailTarget.fullName}`
+                ? `${emailTarget.year} ${emailTarget.customMake || taxName(emailTarget.make)} ${emailTarget.customModel || taxName(emailTarget.model)} · ${emailTarget.fullName}`
                 : ""}
             </DialogDescription>
           </DialogHeader>

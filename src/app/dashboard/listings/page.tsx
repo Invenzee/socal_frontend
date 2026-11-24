@@ -125,7 +125,7 @@ export default function SellerListingsPage() {
               {row.title}
             </Link>
             <p className="truncate text-xs text-black/45">
-              {row.year} · {row.make?.name} {row.model?.name}
+              {row.year} · {row.customMake || row.make?.name} {row.customModel || row.model?.name}
             </p>
           </div>
         </div>

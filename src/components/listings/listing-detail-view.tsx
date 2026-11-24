@@ -112,8 +112,9 @@ export default function ListingDetailView({ listing }: { listing: Listing }) {
   const photos = orderedPhotos(listing.images);
   const description = listing.description.split(/\n+/).filter(Boolean);
   const specs = [
-    { label: "Make", value: listing.make?.name },
-    { label: "Model", value: listing.model?.name },
+    { label: "Make", value: listing.customMake || listing.make?.name },
+    { label: "Model", value: listing.customModel || listing.model?.name },
+    { label: "Truck Type", value: listing.customTruckType || listing.truckType },
     { label: "Exterior Color", value: listing.exteriorColor },
     { label: "Interior Color", value: listing.interiorColor },
     { label: "Transmission", value: listing.transmission?.name },
